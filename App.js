@@ -1,10 +1,17 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-
-import ServicesNavigator from "./navigation/ServicesNavigator";
+import { useFonts, Prompt_400Regular } from '@expo-google-fonts/prompt';
+import AppNavigator from "./navigation/AppNavigator";
+import { AppLoading } from "expo";
 
 export default function App() {
-  return <ServicesNavigator/>
+  let [fontsLoaded] = useFonts({
+    Prompt_400Regular,
+  });
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+  return <AppNavigator/>
 }
 
 const styles = StyleSheet.create({
