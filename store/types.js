@@ -1,0 +1,4 @@
+export const GET_CATEGORIES = 'GET_CATEGORIES';
+export const CATEGORIES_ERROR = 'CATEGORIES_ERROR'
+export const GET_SHOPS = 'GET_SHOPS';
+export const SHOPS_ERROR = 'SHOPS_ERROR'

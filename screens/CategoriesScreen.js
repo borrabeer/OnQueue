@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -8,17 +8,29 @@ import {
   TouchableOpacity,
   Platform,
 } from "react-native";
-import { CATEGORIES } from "../data/dummy-data";
 import CategoryGridTile from "../components/CategoryGridTile";
+import { useDispatch, useSelector } from "react-redux";
+import { getCategories } from '../store/actions/servicesAction'
 
 const CategoriesScreen = (props) => {
+  const availableCategories = useSelector(state => state.services.categories);
+  const dispatch = useDispatch();
+  const getCategoriesHandler = () => {
+    dispatch(getCategories())
+  }
+  useEffect(() => {
+    getCategoriesHandler();
+  }, []);
   const renderGridItem = (itemData) => {
     return (
       <CategoryGridTile
-        title={itemData.item.title}
-        image={itemData.item.image}
+        title={itemData.item.name}
+        image={itemData.item.icon_url}
         onSelect={() => {
-          props.navigation.navigate("categoryService", { categoryId: itemData.item.id })
+          props.navigation.navigate("shopScreen", {
+            category_id: itemData.item.id,
+            category_name: itemData.item.name
+          })
         }}
       />
     );
@@ -30,7 +42,7 @@ const CategoriesScreen = (props) => {
         <Text style={[styles.fontBold, { fontSize: 22 }]}>ยินดีต้อนรับสู่แอพพลิเคชั่น OnQueue</Text>
         <Text style={[styles.fontBold, { fontSize: 18 }]}>กรุณาเลือกหมวดหมู่ที่ต้องการใช้บริการ</Text>
       </View>
-      <FlatList data={CATEGORIES} renderItem={renderGridItem} numColumns={2} />
+      <FlatList data={availableCategories} renderItem={renderGridItem} numColumns={2} />
     </View>
   );
 };
@@ -50,9 +62,9 @@ const styles = StyleSheet.create({
   },
   fontBold: {
     fontWeight: "bold",
-    fontFamily: "Prompt_400Regular"
+    fontFamily: "Prompt_700Bold",
+    color: "#515151",
   }
 });
-
 
 export default CategoriesScreen;

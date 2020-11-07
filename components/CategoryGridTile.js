@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
+    fontFamily: "Prompt_400Regular",
     textAlign: "center",
   },
   bgContainer: {

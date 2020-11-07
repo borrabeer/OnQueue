@@ -7,20 +7,16 @@ import {
   Platform,
   FlatList,
 } from "react-native";
-import { CATEGORIES, MEALS } from "../data/dummy-data";
+import { CATEGORIES, SHOPS } from "../data/dummy-data";
+import ShopList from "../components/ShopList";
 
 const CategoryMealsScreen = (props) => {
-  const renderMealItem = (itemData) => {
-    return (
-      <View style={{ height: 50, width: "40%" }}>
-        <Text>{itemData.item.title}</Text>
-      </View>
-    );
-  };
 
   return (
-    <View>
-      <Text>Category Meals Screen!!</Text>
+    <View style={styles.screen}>
+      <ShopList
+        listData={SHOPS}
+        navigation={props.navigation} />
     </View>
   );
 };

@@ -3,20 +3,29 @@ import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 import CategoriesScreen from "../screens/CategoriesScreen";
-import CategoryServicesScreen from "../screens/CategoryServicesScreen";
+import ShopScreen from "../screens/ShopScreen";
 import { Ionicons, AntDesign, FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import ScanQrCode from "../screens/ScanQrCode";
 import UserService from "../screens/UserService";
+import ServiceScreen from "../screens/ServiceScreen";
 
 const ServicesNavigator = createStackNavigator(
   {
     categories: CategoriesScreen,
-    categoryService: CategoryServicesScreen,
+    shopScreen: ShopScreen,
+    serviceScreen: ServiceScreen,
   },
   {
     defaultNavigationOptions: {
-      headerStyle: { backgroundColor: "#3671D6" },
+      headerStyle: {
+        backgroundColor: "#3671D6",
+      },
       headerTintColor: "white",
+      headerTitleStyle: {
+        fontFamily: "Prompt_400Regular",
+        fontSize: 31
+      },
+      headerBackTitle: "Back"
     },
   }
 );
@@ -29,7 +38,11 @@ const ScanQrCodeNavigator = createStackNavigator(
     defaultNavigationOptions: {
       headerStyle: { backgroundColor: "#3671D6" },
       headerTintColor: "white",
-      headerTitle: "Scan QR Code"
+      headerTitle: "Scan QR Code",
+      headerTitleStyle: {
+        fontFamily: "Prompt_400Regular",
+        fontSize: 31
+      }
     },
   }
 )
@@ -53,7 +66,7 @@ const MainNavigator = createBottomTabNavigator(
       screen: ServicesNavigator,
       navigationOptions: {
         tabBarLabel: "บริการ",
-        tabBarIcon: ({tintColor}) => {
+        tabBarIcon: ({ tintColor }) => {
           return (<FontAwesome5 name="servicestack" size={24} color={tintColor} />)
         }
       }
@@ -62,7 +75,7 @@ const MainNavigator = createBottomTabNavigator(
       screen: ScanQrCodeNavigator,
       navigationOptions: {
         tabBarLabel: "สแกนคิว",
-        tabBarIcon: ({tintColor}) => {
+        tabBarIcon: ({ tintColor }) => {
           return (<MaterialCommunityIcons name="qrcode-scan" size={24} color={tintColor} />)
         }
       }
@@ -71,7 +84,7 @@ const MainNavigator = createBottomTabNavigator(
       screen: UserServiceNavigator,
       navigationOptions: {
         tabBarLabel: "ล็อคอิน",
-        tabBarIcon: ({tintColor}) => {
+        tabBarIcon: ({ tintColor }) => {
           return (<AntDesign name="user" size={24} color={tintColor} />)
         }
       }
