@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,18 +7,24 @@ import {
   StyleSheet,
   TouchableOpacity,
   Platform,
+  ActivityIndicator,
 } from "react-native";
 import CategoryGridTile from "../components/CategoryGridTile";
 import { useDispatch, useSelector } from "react-redux";
-import { getCategories } from '../store/actions/servicesAction'
+import { getCategories, setLoading } from '../store/actions/servicesAction'
 
 const CategoriesScreen = (props) => {
+  const isLoading = useSelector(state => state.services.isLoading);
   const availableCategories = useSelector(state => state.services.categories);
   const dispatch = useDispatch();
   const getCategoriesHandler = () => {
     dispatch(getCategories())
   }
+  const setLoadingHandler = (bool) => {
+    dispatch(setLoading(bool))
+  }
   useEffect(() => {
+    setLoadingHandler(true);
     getCategoriesHandler();
   }, []);
   const renderGridItem = (itemData) => {
@@ -35,7 +41,13 @@ const CategoriesScreen = (props) => {
       />
     );
   };
-
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+      </View>
+    )
+  }
   return (
     <View style={styles.screen}>
       <View style={[styles.viewCenter]}>

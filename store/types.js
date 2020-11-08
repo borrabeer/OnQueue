@@ -1,4 +1,7 @@
 export const GET_CATEGORIES = 'GET_CATEGORIES';
-export const CATEGORIES_ERROR = 'CATEGORIES_ERROR'
+export const CATEGORIES_ERROR = 'CATEGORIES_ERROR';
 export const GET_SHOPS = 'GET_SHOPS';
-export const SHOPS_ERROR = 'SHOPS_ERROR'
+export const SHOPS_ERROR = 'SHOPS_ERROR';
+export const SET_LOADING = "SET_LOADING";
+export const GET_SERVICES = 'GET_SERVICES';
+export const SERVICES_ERROR = "SERVICES_ERROR";

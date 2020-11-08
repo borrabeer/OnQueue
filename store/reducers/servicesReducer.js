@@ -1,9 +1,10 @@
-import { GET_CATEGORIES, GET_SHOPS } from "../types";
+import { GET_CATEGORIES, GET_SHOPS, SET_LOADING, GET_SERVICES } from "../types";
 
 const initialState = {
     categories: [],
     shops: [],
-    services: []
+    services: [],
+    isLoading: true,
 }
 
 const serviceReducer = (state = initialState, action) => {
@@ -11,12 +12,25 @@ const serviceReducer = (state = initialState, action) => {
         case GET_CATEGORIES:
             return {
                 ...state,
-                categories: action.payload
+                categories: action.payload,
+                isLoading: false,
             }
         case GET_SHOPS:
             return {
                 ...state,
-                shops: action.payload
+                shops: action.payload,
+                isLoading: false,
+            }
+        case GET_SERVICES:
+            return {
+                ...state,
+                services: action.payload,
+                isLoading: false,
+            }
+        case SET_LOADING:
+            return {
+                ...state,
+                isLoading: action.data,
             }
         default:
             return state;

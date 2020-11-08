@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -6,17 +6,35 @@ import {
   StyleSheet,
   Platform,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import { CATEGORIES, SHOPS } from "../data/dummy-data";
 import ServiceList from "../components/ServiceList";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { getServices, setLoading } from '../store/actions/servicesAction'
 
 const ServiceScreen = (props) => {
-  const shopId = props.navigation.getParam("shopId");
+  const isLoading = useSelector(state => state.services.isLoading);
+  const shop_id = props.navigation.getParam("shop_id");
   const availableServices = useSelector(state => state.services.services);
-  const displayServices = availableServices.filter(
-    (shop) => shop.shopId.indexOf(shopId) >= 0
-  );
+  const dispatch = useDispatch();
+  const getServicesHandler = (shop_id) => {
+    dispatch(getServices(shop_id))
+  }
+  const setLoadingHandler = (bool) => {
+    dispatch(setLoading(bool))
+  }
+  useEffect(() => {
+    setLoadingHandler(true);
+    getServicesHandler(shop_id);
+  }, []);
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+      </View>
+    )
+  }
   const renderServiceItem = (itemData) => {
     return (
       <Text>{itemData.item.name}</Text>
@@ -25,17 +43,16 @@ const ServiceScreen = (props) => {
   return (
     <View style={styles.screen}>
       <FlatList
-        data={displayServices}
+        data={availableServices}
         renderItem={renderServiceItem} />
     </View>
   );
 };
 
 ServiceScreen.navigationOptions = (navigationData) => {
-  const shopId = navigationData.navigation.getParam("shopId");
-  const displayShop = SHOPS.find((shop) => shop.id === shopId);
+  const shop_name = navigationData.navigation.getParam("shop_name");
   return {
-    headerTitle: displayShop.name
+    headerTitle: shop_name
   }
 }
 
