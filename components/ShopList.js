@@ -12,7 +12,8 @@ const ShopList = (props) => {
         onSelectShop={() => {
           props.navigation.navigate("serviceScreen", {
             shop_id: itemData.item.id,
-            shop_name: itemData.item.name
+            shop_name: itemData.item.name,
+            shop_image: itemData.item.icon_url
           })
         }} />
     )

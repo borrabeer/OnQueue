@@ -11,7 +11,8 @@ import {
 } from "react-native";
 import CategoryGridTile from "../components/CategoryGridTile";
 import { useDispatch, useSelector } from "react-redux";
-import { getCategories, setLoading } from '../store/actions/servicesAction'
+import { getCategories, setLoading, validateUserToken } from '../store/actions/servicesAction';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CategoriesScreen = (props) => {
   const isLoading = useSelector(state => state.services.isLoading);
@@ -23,7 +24,15 @@ const CategoriesScreen = (props) => {
   const setLoadingHandler = (bool) => {
     dispatch(setLoading(bool))
   }
+  const checkLogin = async () => {
+    var token = await AsyncStorage.getItem("@OnQueue_Token");
+    token != null ? validateUserTokenHandler(JSON.parse(token).access) : console.log("token not found");
+  }
+  const validateUserTokenHandler = (token) => {
+    dispatch(validateUserToken(token))
+  }
   useEffect(() => {
+    checkLogin();
     setLoadingHandler(true);
     getCategoriesHandler();
   }, []);

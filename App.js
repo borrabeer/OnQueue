@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet } from "react-native";
 import { useFonts, Prompt_400Regular, Prompt_700Bold } from '@expo-google-fonts/prompt';
 import AppNavigator from "./navigation/AppNavigator";
 import { AppLoading } from "expo";
 import serviceReducer from "./store/reducers/servicesReducer";
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import { combineReducers, createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 
