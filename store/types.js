@@ -10,3 +10,6 @@ export const SET_USER_TOKEN = "SET_USER_TOKEN";
 export const GET_USER_DATA = "GET_USER_DATA";
 export const GET_USER_TOKEN = "GET_USER_TOKEN";
 export const USER_ERROR = "USER_ERROR";
+export const USER_LOGOUT = "USER_LOGOUT";
+export const USER_BOOK_QUEUE = "USER_BOOK_QUEUE";
+export const SET_USER_DATA_TOKEN = "SET_USER_DATA_TOKEN";

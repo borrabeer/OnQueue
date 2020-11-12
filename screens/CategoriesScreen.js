@@ -26,7 +26,7 @@ const CategoriesScreen = (props) => {
   }
   const checkLogin = async () => {
     var token = await AsyncStorage.getItem("@OnQueue_Token");
-    token != null ? validateUserTokenHandler(JSON.parse(token).access) : console.log("token not found");
+    token != null ? validateUserTokenHandler(JSON.parse(token)) : console.log("token not found");
   }
   const validateUserTokenHandler = (token) => {
     dispatch(validateUserToken(token))

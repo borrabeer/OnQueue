@@ -1,20 +1,8 @@
-import Category from "../models/category";
-import Shop from "../models/shop";
-import Service from "../models/service";
-
-export const CATEGORIES = [
-  new Category("c1", "ธนาคาร", "https://i.imgur.com/RWZkgOv.png"),
-  new Category("c2", "ร้านอาหาร", "https://i.imgur.com/doqC103.png"),
-  new Category("c3", "บริการเครือข่าย", "https://i.imgur.com/uaKji9D.png"),
-  new Category("c4", "แฟชั่น", "https://i.imgur.com/mfoHxtB.png"),
-  new Category("c5", "โรงพยาบาล", "https://i.imgur.com/neBaouC.png"),
-  new Category("c6", "อื่น ๆ", "https://i.imgur.com/5WrmE1Y.png"),
-];
-
-export const SHOPS = [
-  new Shop("s1", "BonChon", "ลาดกระบัง", "https://i.imgur.com/CppXInc.png", "c2"),
-];
-
-export const SERVICES = [
-  new Service("ss1", "จองโต๊ะ", "s1"),
+import UserFunction from "../models/userfunction";
+import * as Action from "../store/types";
+export const USERFUNCTION = [
+  new UserFunction("u1", "แก้ไขข้อมูล", "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQQd326Nlb2A9bZXER6wetzJ_cBaaz6JLljAg&usqp=CAU"),
+  new UserFunction("u2", "จัดการสถานที่", "https://image.flaticon.com/icons/png/512/235/235861.png"),
+  new UserFunction("u3", "จักการคิว", "https://image.flaticon.com/icons/png/128/835/835885.png"),
+  new UserFunction(Action.USER_LOGOUT, "ล็อกเอาท์", "https://image.flaticon.com/icons/png/128/3532/3532203.png"),
 ];

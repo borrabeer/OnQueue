@@ -4,16 +4,20 @@ import { createAppContainer } from "react-navigation";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 import CategoriesScreen from "../screens/CategoriesScreen";
 import ShopScreen from "../screens/ShopScreen";
+import QueueScreen from "../screens/QueueScreen";
 import { Ionicons, AntDesign, FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import ScanQrCode from "../screens/ScanQrCode";
 import UserService from "../screens/UserService";
 import ServiceScreen from "../screens/ServiceScreen";
+import AuthIcon from "../components/AuthIcon";
+import AuthTitle from "../components/AuthTitle";
 
 const ServicesNavigator = createStackNavigator(
   {
     categories: CategoriesScreen,
     shopScreen: ShopScreen,
     serviceScreen: ServiceScreen,
+    queueScreen: QueueScreen,
   },
   {
     defaultNavigationOptions: {
@@ -83,9 +87,11 @@ const MainNavigator = createBottomTabNavigator(
     UserService: {
       screen: UserServiceNavigator,
       navigationOptions: {
-        tabBarLabel: "ล็อคอิน",
+        tabBarLabel: ({ tintColor }) => {
+          return (<AuthTitle color={tintColor} />)
+        },
         tabBarIcon: ({ tintColor }) => {
-          return (<AntDesign name="user" size={24} color={tintColor} />)
+          return (<AuthIcon size={24} color={tintColor} />)
         }
       }
     }

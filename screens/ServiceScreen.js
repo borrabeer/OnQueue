@@ -8,14 +8,19 @@ import {
   FlatList,
   ActivityIndicator,
   Image,
+  Alert,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { getServices, setLoading } from '../store/actions/servicesAction'
 import { AntDesign } from '@expo/vector-icons';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { createBookingQueue } from "../store/actions/servicesAction";
 
 const ServiceScreen = (props) => {
   const isLoading = useSelector(state => state.services.isLoading);
+  const isLogin = useSelector(state => state.services.isLogin);
+  const userToken = useSelector(state => state.services.userToken);
   const shop_id = props.navigation.getParam("shop_id");
   const shop_image = props.navigation.getParam("shop_image");
   const availableServices = useSelector(state => state.services.services);
@@ -27,11 +32,10 @@ const ServiceScreen = (props) => {
       icon: () => {
         <AntDesign name="caretright" size={24} color="black" />
       },
-      hidden: index == 0 ? true : false
     };
     servicesData.push(element);
   }
-  const [SelectService, setSelectService] = useState(servicesData[0] ? servicesData[0].value : null);
+  const [SelectService, setSelectService] = useState(servicesData[0] != null ? servicesData[0].value : null);
   const dispatch = useDispatch();
   const getServicesHandler = (shop_id) => {
     dispatch(getServices(shop_id))
@@ -39,10 +43,45 @@ const ServiceScreen = (props) => {
   const setLoadingHandler = (bool) => {
     dispatch(setLoading(bool))
   }
+  const createBookingQueueHandler = (token, service_id) => {
+    dispatch(createBookingQueue(token, service_id))
+  }
   useEffect(() => {
     setLoadingHandler(true);
     getServicesHandler(shop_id);
   }, []);
+  const bookQueue = () => {
+    if (SelectService != null) {
+      if (isLogin) {
+        console.log("ServiceScreen : " + userToken);
+        createBookingQueueHandler(userToken, SelectService);
+        Alert.alert(
+          "Booking Success!",
+          "ทำการจองคิวเรียบร้อยแล้ว",
+        );
+        props.navigation.navigate("queueScreen");
+      } else {
+        Alert.alert(
+          "Please Login first!",
+          "กรุณาล็อคอินก่อนทำการจอง",
+          [
+            {
+              text: "ยกเลิก",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel"
+            },
+            { text: "ล็อคอิน", onPress: () => props.navigation.navigate("UserService") }
+          ],
+          { cancelable: false }
+        );
+      }
+    } else {
+      Alert.alert(
+        "Please Select your service!",
+        "กรุณาเลือกบริการที่ต้องการจอง",
+      );
+    }
+  }
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -57,6 +96,9 @@ const ServiceScreen = (props) => {
       </View>
       <Text style={{ marginBottom: 10, fontSize: 20, fontWeight: 'bold', color: 'grey', fontFamily: "Prompt_400Regular" }} >เลือกประเภทการบริการ</Text>
       <DropDownPicker items={servicesData} defaultValue={SelectService} containerStyle={{ height: 40 }} onChangeItem={item => setSelectService(item.value)} />
+      <TouchableOpacity onPress={bookQueue}>
+        <Text>ยืนยันการจอง</Text>
+      </TouchableOpacity>
     </View>
   );
 };
