@@ -15,7 +15,7 @@ const UserService = (props) => {
         )
     }
     if (isLogin) {
-        return <UserManagement />
+        return <UserManagement navigation={props.navigation} />
     } else {
         return <LoginScreen />
     }

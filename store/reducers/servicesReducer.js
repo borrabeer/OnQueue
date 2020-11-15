@@ -4,6 +4,8 @@ const initialState = {
     categories: [],
     shops: [],
     services: [],
+    queuesHistory: [],
+    queue: [],
     isLoading: true,
     userData: null,
     userToken: null,
@@ -28,6 +30,18 @@ const serviceReducer = (state = initialState, action) => {
             return {
                 ...state,
                 services: action.payload,
+                isLoading: false,
+            }
+        case Action.SET_QUEUES:
+            return {
+                ...state,
+                queuesHistory: action.payload,
+                isLoading: false,
+            }
+        case Action.SET_QUEUE:
+            return {
+                ...state,
+                queue: action.payload,
                 isLoading: false,
             }
         case Action.SET_LOADING:

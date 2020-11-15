@@ -13,6 +13,7 @@ import CategoryGridTile from "../components/CategoryGridTile";
 import { useDispatch, useSelector } from "react-redux";
 import { getCategories, setLoading, validateUserToken } from '../store/actions/servicesAction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import NavigationService from "../NavigationService";
 
 const CategoriesScreen = (props) => {
   const isLoading = useSelector(state => state.services.isLoading);
@@ -42,7 +43,7 @@ const CategoriesScreen = (props) => {
         title={itemData.item.name}
         image={itemData.item.icon_url}
         onSelect={() => {
-          props.navigation.navigate("shopScreen", {
+          NavigationService.navigate("shopScreen", {
             category_id: itemData.item.id,
             category_name: itemData.item.name
           })

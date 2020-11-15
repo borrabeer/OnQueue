@@ -1,6 +1,8 @@
 import * as Action from "../types";
 import Axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Alert } from "react-native";
+import NavigationService from '../../NavigationService';
 const BaseURL = "onqueue-api.herokuapp.com"
 export const getCategories = () => {
     return (dispatch) => {
@@ -53,6 +55,48 @@ export const getServices = (shop_id) => {
     }
 }
 
+export const getQueue = (queue_id, token) => {
+    return (dispatch) => {
+        Axios.get(`https://${BaseURL}/services/queue/${queue_id}/`, {
+            headers: {
+                "Authorization": "Bearer " + token,
+            }
+        })
+            .then(data => {
+                dispatch({
+                    type: Action.SET_QUEUE,
+                    payload: data.data
+                })
+            })
+            .catch(() => {
+                dispatch({
+                    type: Action.QUEUE_ERRORS
+                })
+            })
+    }
+}
+
+export const getQueueHistory = (token) => {
+    return (dispatch) => {
+        Axios.get(`https://${BaseURL}/services/queue/history/`, {
+            headers: {
+                "Authorization": "Bearer " + token,
+            }
+        })
+            .then(data => {
+                dispatch({
+                    type: Action.SET_QUEUES,
+                    payload: data.data
+                })
+            })
+            .catch(() => {
+                dispatch({
+                    type: Action.QUEUE_ERRORS
+                })
+            })
+    }
+}
+
 export const getUserToken = (id) => {
     return (dispatch) => {
         Axios.post(`https://${BaseURL}/api/token/`, {
@@ -87,6 +131,7 @@ export const getUserData = (id, email, name, image) => {
             image: image,
         })
             .then(data => {
+                console.log(data.data);
                 dispatch({
                     type: Action.SET_USER_DATA,
                     payload: data.data
@@ -102,13 +147,13 @@ export const getUserData = (id, email, name, image) => {
 
 export const validateUserToken = (token) => {
     return (dispatch) => {
-        console.log("validateUserToken : " + token)
         Axios.get(`https://${BaseURL}/api/token/verify/`, {
             headers: {
                 "Authorization": "Bearer " + token,
             }
         })
             .then(data => {
+                console.log(data.data);
                 dispatch({
                     type: Action.SET_USER_DATA_TOKEN,
                     data: data.data,
@@ -125,18 +170,25 @@ export const validateUserToken = (token) => {
 
 export const createBookingQueue = (token, service_id) => {
     return (dispatch) => {
-        console.log("createBookingQueue : " + token);
         Axios.post(`https://${BaseURL}/services/queue/book/${service_id}/`, {}, {
             headers: {
                 "Authorization": "Bearer " + token,
             }
         })
             .then(data => {
-                console.log("createBookingQueue : " + data);
-                // dispatch({
-                //     type: Action.SET_USER_DATA,
-                //     payload: data.data
-                // })
+                if (data.status === 201) {
+                    Alert.alert(
+                        "Booking Success!",
+                        "ทำการจองคิวเรียบร้อยแล้ว",
+                    );
+                    dispatch({
+                        type: Action.SET_QUEUE,
+                        payload: data.data
+                    })
+                    NavigationService.navigate("queueScreen", {
+                        queue_id: data.data.id
+                    })
+                }
             })
             .catch(e => {
                 dispatch({

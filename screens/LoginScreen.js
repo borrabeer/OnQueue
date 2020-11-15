@@ -10,7 +10,9 @@ const LoginScreen = (props) => {
     const getUserDataHandler = (id, email, name, image) => {
         dispatch(getUserData(id, email, name, image));
         dispatch(setLoading(true));
-        getUserTokenHandler(id);
+        setTimeout(() => {
+            getUserTokenHandler(id);
+        }, 1000);
     }
     const getUserTokenHandler = (id) => {
         dispatch(getUserToken(id));

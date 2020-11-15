@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from "react-navigation-tabs";
 import CategoriesScreen from "../screens/CategoriesScreen";
 import ShopScreen from "../screens/ShopScreen";
 import QueueScreen from "../screens/QueueScreen";
+import QueueHistory from "../screens/QueueHistory";
 import { Ionicons, AntDesign, FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import ScanQrCode from "../screens/ScanQrCode";
 import UserService from "../screens/UserService";
@@ -18,6 +19,7 @@ const ServicesNavigator = createStackNavigator(
     shopScreen: ShopScreen,
     serviceScreen: ServiceScreen,
     queueScreen: QueueScreen,
+    queueHistory: QueueHistory,
   },
   {
     defaultNavigationOptions: {

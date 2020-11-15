@@ -7,6 +7,8 @@ import serviceReducer from "./store/reducers/servicesReducer";
 import { Provider, useDispatch } from "react-redux";
 import { combineReducers, createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
+import { NavigationContainer } from '@react-navigation/native';
+import NavigationService from './NavigationService';
 
 const rootReducer = combineReducers({
   services: serviceReducer
@@ -22,7 +24,12 @@ export default function App() {
   if (!fontsLoaded) {
     return <AppLoading />;
   }
-  return (<Provider store={store}><AppNavigator /></Provider>)
+  return (
+    <Provider store={store}>
+      <AppNavigator ref={navigatorRef => {
+        NavigationService.setTopLevelNavigator(navigatorRef);
+      }} />
+    </Provider>)
 }
 
 const styles = StyleSheet.create({

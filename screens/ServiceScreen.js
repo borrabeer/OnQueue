@@ -16,6 +16,7 @@ import { AntDesign } from '@expo/vector-icons';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { createBookingQueue } from "../store/actions/servicesAction";
+import NavigationService from "../NavigationService";
 
 const ServiceScreen = (props) => {
   const isLoading = useSelector(state => state.services.isLoading);
@@ -54,12 +55,8 @@ const ServiceScreen = (props) => {
     if (SelectService != null) {
       if (isLogin) {
         console.log("ServiceScreen : " + userToken);
+        setLoadingHandler(true)
         createBookingQueueHandler(userToken, SelectService);
-        Alert.alert(
-          "Booking Success!",
-          "ทำการจองคิวเรียบร้อยแล้ว",
-        );
-        props.navigation.navigate("queueScreen");
       } else {
         Alert.alert(
           "Please Login first!",
@@ -70,7 +67,7 @@ const ServiceScreen = (props) => {
               onPress: () => console.log("Cancel Pressed"),
               style: "cancel"
             },
-            { text: "ล็อคอิน", onPress: () => props.navigation.navigate("UserService") }
+            { text: "ล็อคอิน", onPress: () => NavigationService.navigate("UserService") }
           ],
           { cancelable: false }
         );

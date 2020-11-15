@@ -1,6 +1,7 @@
 import React from "react";
 import { FlatList, View, StyleSheet } from "react-native";
 import ServiceItem from "./ServiceItem";
+import NavigationService from '../NavigationService';
 
 const ServiceList = (props) => {
     const renderServiceItem = (itemData) => {
@@ -10,7 +11,7 @@ const ServiceList = (props) => {
                 branch={itemData.item.branch}
                 image={itemData.item.image}
                 onSelectShop={() => {
-                    props.navigation.navigate("serviceScreen"), {
+                    NavigationService.navigate("serviceScreen"), {
                         id: itemData.item.id,
                     }
                 }} />

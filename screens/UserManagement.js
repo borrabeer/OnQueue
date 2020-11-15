@@ -14,12 +14,20 @@ import {
 } from "react-native";
 import UserGridTile from "../components/UserGridTile";
 import { useSelector, useDispatch } from "react-redux";
-import { USERFUNCTION } from "../data/dummy-data";
+import { USERFUNCTION, STAFFFUNCTION } from "../data/dummy-data";
 import * as Action from "../store/types";
 import { userLogout } from "../store/actions/servicesAction";
+import NavigationService from "../NavigationService";
 
 const UserManagement = (props) => {
     const userData = useSelector(state => state.services.userData);
+    let isStaff = false;
+    for (let index = 0; index < userData.user.groups.length; index++) {
+        const element = userData.user.groups[index];
+        if (element["name"] === "Staff") {
+            isStaff = true;
+        }
+    }
     const dispatch = useDispatch();
     const userLogoutHandler = () => {
         dispatch(userLogout());
@@ -28,7 +36,11 @@ const UserManagement = (props) => {
         switch (id) {
             case Action.USER_LOGOUT:
                 userLogoutHandler();
-                Alert.alert('Logged Out!', 'คุณได้ล็อกเอาท์แล้ว !')
+                Alert.alert('Logged Out!', 'คุณได้ล็อกเอาท์แล้ว !');
+                break;
+            case Action.QUEUE_HISTORY:
+                NavigationService.navigate("queueHistory")
+                break;
             default:
                 console.log(id);
         }
@@ -64,7 +76,7 @@ const UserManagement = (props) => {
                 backgroundColor: "#ffffff"
             }}>
 
-                <FlatList renderItem={renderUserFunction} data={USERFUNCTION} numColumns={2} />
+                <FlatList renderItem={renderUserFunction} data={isStaff ? STAFFFUNCTION : USERFUNCTION} numColumns={2} />
                 <TouchableHighlight
                     style={styles.circle}
                     underlayColor='#ccc'

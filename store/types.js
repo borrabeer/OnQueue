@@ -13,3 +13,7 @@ export const USER_ERROR = "USER_ERROR";
 export const USER_LOGOUT = "USER_LOGOUT";
 export const USER_BOOK_QUEUE = "USER_BOOK_QUEUE";
 export const SET_USER_DATA_TOKEN = "SET_USER_DATA_TOKEN";
+export const SET_QUEUES = 'SET_QUEUES';
+export const SET_QUEUE = 'SET_QUEUE';
+export const QUEUE_ERRORS = "QUEUE_ERRORS";
+export const QUEUE_HISTORY = "QUEUE_HISTORY";

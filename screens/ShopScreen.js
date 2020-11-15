@@ -12,7 +12,7 @@ import { CATEGORIES } from "../data/dummy-data";
 import ShopList from "../components/ShopList";
 import { useDispatch, useSelector } from "react-redux";
 import { SearchBar } from "react-native-elements";
-import { getShops, setLoading } from '../store/actions/servicesAction'
+import { getShops, setLoading } from '../store/actions/servicesAction';
 
 const ShopScreen = (props) => {
   const isLoading = useSelector(state => state.services.isLoading);
