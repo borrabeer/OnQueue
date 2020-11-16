@@ -3,6 +3,7 @@ import * as Action from "../types";
 const initialState = {
     categories: [],
     shops: [],
+    manageShops: [],
     services: [],
     queuesHistory: [],
     queue: [],
@@ -24,6 +25,18 @@ const serviceReducer = (state = initialState, action) => {
             return {
                 ...state,
                 shops: action.payload,
+                isLoading: false,
+            }
+        case Action.SET_MANAGE_SHOP:
+            return {
+                ...state,
+                manageShops: action.payload,
+                isLoading: false,
+            }
+        case Action.ADD_MANAGE_SHOP:
+            return {
+                ...state,
+                manageShops: state.manageShops.concat(action.payload),
                 isLoading: false,
             }
         case Action.GET_SERVICES:

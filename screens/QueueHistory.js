@@ -15,7 +15,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getQueueHistory, setLoading } from "../store/actions/servicesAction";
 import NavigationService from "../NavigationService";
 
-const QueueScreen = (props) => {
+const QueueHistory = (props) => {
   const isLoading = useSelector(state => state.services.isLoading);
   const userToken = useSelector(state => state.services.userToken);
   const currentQueue = useSelector(state => state.services.queuesHistory);
@@ -55,7 +55,7 @@ const QueueScreen = (props) => {
     </View>
   );
 };
-QueueScreen.navigationOptions = {
+QueueHistory.navigationOptions = {
   headerTitle: "OnQueue",
 };
 
@@ -67,4 +67,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default QueueScreen;
+export default QueueHistory;

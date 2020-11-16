@@ -9,12 +9,12 @@ import {
   ActivityIndicator,
   Image,
   Alert,
+  TouchableOpacity
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { getServices, setLoading } from '../store/actions/servicesAction'
 import { AntDesign } from '@expo/vector-icons';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { createBookingQueue } from "../store/actions/servicesAction";
 import NavigationService from "../NavigationService";
 

@@ -38,6 +38,28 @@ export const getShops = (category_id) => {
     }
 }
 
+export const getManageShops = (token) => {
+    return (dispatch) => {
+        Axios.get(`https://${BaseURL}/shops/manage/`, {
+            headers: {
+                "Authorization": "Bearer " + token,
+            }
+        })
+            .then(data => {
+                console.log(data.data);
+                dispatch({
+                    type: Action.SET_MANAGE_SHOP,
+                    payload: data.data
+                })
+            })
+            .catch(() => {
+                dispatch({
+                    type: Action.SHOPS_ERROR
+                })
+            })
+    }
+}
+
 export const getServices = (shop_id) => {
     return (dispatch) => {
         Axios.get(`https://${BaseURL}/services/${shop_id}`)
@@ -193,6 +215,67 @@ export const createBookingQueue = (token, service_id) => {
             .catch(e => {
                 dispatch({
                     type: Action.USER_ERROR,
+                    payload: e
+                })
+            })
+    }
+}
+
+export const createShop = (token, shopData) => {
+    return (dispatch) => {
+        let formData = new FormData();
+        formData.append("image", {
+            uri: shopData.image.uri,
+            type: shopData.image.type,
+            name: shopData.shop_name,
+        })
+        Axios.post('https://api.imgur.com/3/image/', formData, {
+            headers: {
+                "Authorization": "Client-ID 415d9499bd03c8e",
+            }
+        })
+            .then(data => {
+                if (data.status === 200) {
+                    console.log(data.data.data.link);
+                    Axios.post(`https://${BaseURL}/shops/create/`, {
+                        category_id: shopData.category_id,
+                        shop_name: shopData.shop_name,
+                        branch_name: shopData.branch_name,
+                        open_time: shopData.open_time,
+                        close_time: shopData.close_time,
+                        status: shopData.status,
+                        image: data.data.data.link
+                    }, {
+                        headers: {
+                            "Authorization": "Bearer " + token,
+                        }
+                    })
+                        .then(data => {
+                            Alert.alert("Create Success!", "สร้างร้านค้าสำเร็จ!",
+                                [
+                                    {
+                                        text: "ตกลง", onPress: () => {
+                                            dispatch({
+                                                type: Action.ADD_MANAGE_SHOP,
+                                                payload: data.data
+                                            })
+                                            NavigationService.navigate("manageLocation");
+                                        }
+                                    }
+                                ],
+                                { cancelable: false })
+                        })
+                        .catch(e => {
+                            dispatch({
+                                type: Action.SHOPS_ERROR,
+                                payload: e
+                            })
+                        })
+                }
+            })
+            .catch(e => {
+                dispatch({
+                    type: Action.SHOPS_ERROR,
                     payload: e
                 })
             })

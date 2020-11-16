@@ -19,6 +19,7 @@ const ShopScreen = (props) => {
   const [search, setSearch] = useState("");
   const category_id = props.navigation.getParam("category_id");
   const availableShops = useSelector(state => state.services.shops);
+  console.log(availableShops);
   const dispatch = useDispatch();
   const getShopsHandler = (category_id) => {
     dispatch(getShops(category_id))

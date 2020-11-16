@@ -17,3 +17,6 @@ export const SET_QUEUES = 'SET_QUEUES';
 export const SET_QUEUE = 'SET_QUEUE';
 export const QUEUE_ERRORS = "QUEUE_ERRORS";
 export const QUEUE_HISTORY = "QUEUE_HISTORY";
+export const SHOP_MANAGE = "SHOP_MANAGE";
+export const SET_MANAGE_SHOP = "SET_MANAGE_SHOP";
+export const ADD_MANAGE_SHOP = "ADD_MANAGE_SHOP";

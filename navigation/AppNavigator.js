@@ -12,6 +12,8 @@ import UserService from "../screens/UserService";
 import ServiceScreen from "../screens/ServiceScreen";
 import AuthIcon from "../components/AuthIcon";
 import AuthTitle from "../components/AuthTitle";
+import ManageLocation from "../screens/ManageLocation";
+import LocationScreen from "../screens/LocationScreen";
 
 const ServicesNavigator = createStackNavigator(
   {
@@ -19,7 +21,6 @@ const ServicesNavigator = createStackNavigator(
     shopScreen: ShopScreen,
     serviceScreen: ServiceScreen,
     queueScreen: QueueScreen,
-    queueHistory: QueueHistory,
   },
   {
     defaultNavigationOptions: {
@@ -55,7 +56,10 @@ const ScanQrCodeNavigator = createStackNavigator(
 
 const UserServiceNavigator = createStackNavigator(
   {
-    UserService: UserService
+    UserService: UserService,
+    queueHistory: QueueHistory,
+    manageLocation: ManageLocation,
+    locationScreen: LocationScreen,
   },
   {
     defaultNavigationOptions: {
