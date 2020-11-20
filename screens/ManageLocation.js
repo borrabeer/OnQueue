@@ -14,7 +14,7 @@ import { SearchBar } from 'react-native-elements'
 import { useDispatch, useSelector } from "react-redux";
 import LocationItem from "../components/LocationItem";
 import NavigationService from "../NavigationService";
-import { setLoading, getEditShop, getManageServices } from "../store/actions/servicesAction";
+import { setLoading, getEditShop, getManageServices, getManageShopItem } from "../store/actions/servicesAction";
 
 const ManageLocation = (props) => {
   const isLoading = useSelector(state => state.services.isLoading);
@@ -29,6 +29,9 @@ const ManageLocation = (props) => {
   }
   const getManageServicesHandler = (token, id) => {
     dispatch(getManageServices(token, id));
+  }
+  const getManageShopItemHandler = (token, id) => {
+    dispatch(getManageShopItem(token, id));
   }
   if (isLoading) {
     return (
@@ -49,6 +52,10 @@ const ManageLocation = (props) => {
         onManage={() => {
           setLoadingHandler(true);
           getManageServicesHandler(userToken, itemData.item.shop.id);
+        }}
+        onSelect={() => {
+          setLoadingHandler(true);
+          getManageShopItemHandler(userToken, itemData.item.shop.id);
         }}
       />
     )

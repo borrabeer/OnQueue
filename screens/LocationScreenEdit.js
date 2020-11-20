@@ -19,12 +19,15 @@ import { useSelector, useDispatch } from "react-redux";
 import DateTimePickerIOS from "../components/DateTimePickerIOS";
 import DropDownPicker from 'react-native-dropdown-picker';
 import * as ImagePicker from 'expo-image-picker';
-import { createShop, getEditShop, setLoading, setEditShop } from "../store/actions/servicesAction";
+import { createShop, getEditShop, setLoading, setEditShop, deleteShop } from "../store/actions/servicesAction";
 
 const LocationScreenEdit = (props) => {
   const dispatch = useDispatch();
   const setLoadingHandler = (bool) => {
     dispatch(setLoading(bool));
+  }
+  const deleteShopHandler = (token, id) => {
+    dispatch(deleteShop(token, id));
   }
   const shop_id = props.navigation.getParam("shop_id");
   const editShop = useSelector(state => state.services.editShop)
@@ -86,7 +89,7 @@ const LocationScreenEdit = (props) => {
       Alert.alert("Information", "กรุณาใส่เวลารูปภาพของร้าน")
     }
     else {
-      // setLoadingHandler(true);
+      setLoadingHandler(true);
       dispatch(setEditShop(userToken, shop_id, {
         category_id: category,
         shop_name: shopName,
@@ -194,6 +197,29 @@ const LocationScreenEdit = (props) => {
         {image && <View style={{ justifyContent: "center", alignItems: "center" }}><Image source={{ uri: image.uri }} style={{ width: 200, height: 200 }} /></View>}
         <TouchableOpacity style={{ ...styles.button }} onPress={setEditShopHandler}>
           <Text style={[styles.fontButton, { fontSize: 25, color: "#ffffff" }]}>ยืนยันการแก้ไข</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{ ...styles.button, backgroundColor: "#c25e5e", }} onPress={() => {
+          Alert.alert(
+            "Alert",
+            "ต้องการลบร้านค้านี้จริงหรือไม่ ?",
+            [
+              {
+                text: "ยกเลิก",
+                style: "cancel"
+              },
+              {
+                text: "ยืนยัน",
+                onPress: () => {
+                  setLoadingHandler(true);
+                  deleteShopHandler(userToken, editShop.id)
+                },
+                style: "destructive"
+              }
+            ],
+            { cancelable: false }
+          );
+        }}>
+          <Text style={[styles.fontButton, { fontSize: 25, color: "#ffffff" }]}>ลบร้านค้านี้</Text>
         </TouchableOpacity>
       </ScrollView>
       {showOpen && (

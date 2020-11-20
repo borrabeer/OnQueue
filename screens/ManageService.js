@@ -12,20 +12,21 @@ import {
 } from "react-native";
 import { SearchBar } from 'react-native-elements'
 import { useDispatch, useSelector } from "react-redux";
-import LocationItem from "../components/LocationItem";
+import ServiceItem from "../components/ServiceItem";
 import NavigationService from "../NavigationService";
-import { setLoading, getEditShop } from "../store/actions/servicesAction";
+import { setLoading, getEditService } from "../store/actions/servicesAction";
 
 const ManageService = (props) => {
   const isLoading = useSelector(state => state.services.isLoading);
   const userToken = useSelector(state => state.services.userToken);
   const availableServices = useSelector(state => state.services.manageServices);
+  const shop_id = props.navigation.getParam("shop_id");
   const dispatch = useDispatch();
   const setLoadingHandler = (bool) => {
     dispatch(setLoading(bool))
   }
-  const getEditShopHandler = (token, id) => {
-    dispatch(getEditShop(token, id));
+  const getEditServiceHandler = (token, id) => {
+    dispatch(getEditService(token, id));
   }
   if (isLoading) {
     return (
@@ -35,13 +36,14 @@ const ManageService = (props) => {
     )
   }
   const renderServiceItem = (itemData) => {
+    console.log(itemData.item);
     return (
 
-      <LocationItem
-        data={itemData.item.shop}
+      <ServiceItem
+        data={itemData.item}
         onEdit={() => {
-          // setLoadingHandler(true);
-          // getEditShopHandler(userToken, itemData.item.shop.id);
+          setLoadingHandler(true);
+          getEditServiceHandler(userToken, itemData.item.id);
         }}
       />
     )
@@ -57,7 +59,9 @@ const ManageService = (props) => {
       <FlatList data={availableServices} renderItem={renderServiceItem} numColumns={1} />
 
       <TouchableOpacity style={styles.bt} onPress={() => {
-        // NavigationService.navigate("locationScreen")
+        NavigationService.navigate("serviceDetail", {
+          shop_id: shop_id
+        })
       }}>
         <Text style={styles.text} >
           เพิ่มบริการ

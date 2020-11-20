@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -12,42 +13,25 @@ import {
   Image,
   Dimensions,
   ScrollView,
-  Alert,
   ActivityIndicator,
 } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
-import { createShop, setLoading, createService } from "../store/actions/servicesAction";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading, getEditShop, getManageServices, getManageShopItem } from "../store/actions/servicesAction";
 
-const ServiceDetailScreen = (props) => {
-  const dispatch = useDispatch();
-  const setLoadingHandler = (bool) => {
-    dispatch(setLoading(bool));
-  }
-
-  const [serviceName, setServiceName] = useState(null);
-  const [waitingTime, setWaitingTime] = useState(1);
-  const [isEnabled, setIsEnabled] = useState(false);
+const ManageLocationItem = (props) => {
   const isLoading = useSelector(state => state.services.isLoading);
   const userToken = useSelector(state => state.services.userToken);
-  const shop_id = props.navigation.getParam("shop_id");
-  const createServiceHandler = () => {
-    if (serviceName === null || serviceName === "" || serviceName === " ") {
-      Alert.alert("Information", "กรุณาใส่ชื่อบริการ")
-    }
-    else if (waitingTime === null || waitingTime === "" || waitingTime === " " || typeof waitingTime != "number") {
-      Alert.alert("Information", "กรุณาระบุเวลารอคิวโดยประมาณ")
-    }
-    else {
-      setLoadingHandler(true);
-      dispatch(createService(userToken, {
-        shop_id: shop_id,
-        service_name: serviceName,
-        waiting_time: waitingTime,
-        status: isEnabled,
-      }))
-    }
+  const editShop = useSelector(state => state.services.editShop);
+  const dispatch = useDispatch();
+  const setLoadingHandler = (bool) => {
+    dispatch(setLoading(bool))
   }
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  const getEditShopHandler = (token, id) => {
+    dispatch(getEditShop(token, id));
+  }
+  const getManageServicesHandler = (token, id) => {
+    dispatch(getManageServices(token, id));
+  }
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -76,57 +60,59 @@ const ServiceDetailScreen = (props) => {
         backgroundColor: "#ffffff"
 
       }}>
-        <Text style={{ ...styles.fontInput }}>   ชื่อบริการ</Text>
-        <TextInput
+        <Text style={{ ...styles.fontInput }}>   ชื่อร้าน</Text>
+        <Text
           style={{ ...styles.input }}
-          defaultValue={serviceName}
-          placeholder="กรุณาใส่ชื่อชื่อบริการ"
-          onChangeText={text => setServiceName(text)}
-        />
-        <Text style={{ ...styles.fontInput }}>   ระยะรอเวลาต่อคิวโดยประมาณ (นาที)</Text>
-        <TextInput
+        >{editShop.name}</Text>
+        <Text style={{ ...styles.fontInput }}>   สาขา</Text>
+        <Text
           style={{ ...styles.input }}
-          defaultValue={waitingTime.toString()}
-          placeholder="กรุณาระบุเวลารอโดยประมาณ (นาที)"
-          onChangeText={text => setWaitingTime(text)}
-        />
+        >{editShop.branch}</Text>
         <View style={{
-          flex: 1,
+
           marginRight: 15,
           flexDirection: "row",
           justifyContent: "space-between",
         }}>
-
-
-
-          <Text style={{ ...styles.fontInput }}>   สถานะ</Text>
-          <Switch style={{}}
+          <Text style={{ ...styles.fontInput, margin: 18 }}>   เปิด/ปิดร้าน</Text>
+          <Switch style={{ margin: 10 }}
             trackColor={{ false: "#ffffff", true: "#60c459" }}
-            thumbColor={isEnabled ? "#ffffff" : "#ffffff"}
+            thumbColor={editShop.status ? "#ffffff" : "#ffffff"}
             ios_backgroundColor="#c25e5e"
-            onValueChange={toggleSwitch}
-            value={isEnabled}
+            value={editShop.status}
+            disabled
           />
-
         </View>
-        <TouchableOpacity style={{ ...styles.button }} onPress={createServiceHandler}>
-          <Text style={[styles.fontButton, { fontSize: 25, color: "#ffffff" }]}>ยืนยันข้อมูลบริการ</Text>
+
+
+        <TouchableOpacity style={{ ...styles.button, backgroundColor: "#e6c059", }} onPress={() => {
+          setLoadingHandler(true);
+          getEditShopHandler(userToken, editShop.id);
+        }}>
+          <Text style={[styles.fontButton, { fontSize: 25, color: "ffffff" }]}>แก้ไข</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{ ...styles.button, backgroundColor: "#c25e5e", }}>
+          <Text style={[styles.fontButton, { fontSize: 25, color: "#ffffff" }]}>รายชื่อผู้จัดการร้าน</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{ ...styles.button, backgroundColor: "#64c460", }} onPress={() => {
+          setLoadingHandler(true);
+          getManageServicesHandler(userToken, editShop.id);
+        }}>
+          <Text style={[styles.fontButton, { fontSize: 25, color: "#ffffff" }]}>จัดการบริการ</Text>
         </TouchableOpacity>
       </ScrollView>
     </View>
   );
 };
-ServiceDetailScreen.navigationOptions = (navigationData) => {
-  return {
-    headerTitle: "เพิ่มบริการ",
-  }
+ManageLocationItem.navigationOptions = {
+  headerTitle: "จัดการสถานที่",
 };
 
 
 const styles = StyleSheet.create({
 
   button: {
-    margin: 15,
+    margin: 10,
     borderRadius: 10,
     shadowColor: "black",
     shadowOpacity: 0.26,
@@ -135,15 +121,20 @@ const styles = StyleSheet.create({
     elevation: 3,
     padding: 3,
     justifyContent: "flex-end",
-    backgroundColor: "#64c460",
+
     height: 50,
-    // position: 'absolute',
+
     width: 340,
+
+
+
+
   },
   fontButton: {
     fontWeight: "bold",
     fontFamily: "Prompt_400Regular",
     textAlign: "center",
+    justifyContent: "center",
 
   },
   fontInput: {
@@ -251,4 +242,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ServiceDetailScreen;
+export default ManageLocationItem;

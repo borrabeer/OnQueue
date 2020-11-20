@@ -13,9 +13,12 @@ import ServiceScreen from "../screens/ServiceScreen";
 import AuthIcon from "../components/AuthIcon";
 import AuthTitle from "../components/AuthTitle";
 import ManageLocation from "../screens/ManageLocation";
+import ManageLocationItem from "../screens/ManageLocationItem";
 import ManageService from "../screens/ManageService";
 import LocationScreen from "../screens/LocationScreen";
 import LocationScreenEdit from "../screens/LocationScreenEdit";
+import ServiceDetailScreen from "../screens/ServiceDetailScreen";
+import ServiceDetailScreenEdit from "../screens/ServiceDetailScreenEdit";
 
 const ServicesNavigator = createStackNavigator(
   {
@@ -64,6 +67,9 @@ const UserServiceNavigator = createStackNavigator(
     manageService: ManageService,
     locationScreen: LocationScreen,
     locationEdit: LocationScreenEdit,
+    serviceDetail: ServiceDetailScreen,
+    serviceEdit: ServiceDetailScreenEdit,
+    locationItem: ManageLocationItem,
   },
   {
     defaultNavigationOptions: {

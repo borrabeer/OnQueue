@@ -9,29 +9,24 @@ import {
 } from "react-native";
 import { Card, Button } from 'react-native-elements'
 
-const Locationitem = (props) => {
+const LocationItem = (props) => {
   return (
     <View style={styles.container} >
-
-      <Card>
-        <View style={styles.row}>
-          <Image source={{ uri: "https://www.clipartsfree.net/vector/large/49491-small-green-dot-clipart.png" }} style={styles.iconimg} />
-          <View style={styles.column}>
-            <Text style={{ fontSize: 20, fontFamily: "Prompt_400Regular", }}>
-              {props.data.name}
-            </Text>
-            <Text style={{ fontSize: 16, fontFamily: "Prompt_400Regular", }}>
-              {props.data.branch}
-            </Text>
+      <TouchableOpacity onPress={props.onSelect}>
+        <Card>
+          <View style={styles.row}>
+            <Image source={{ uri: "https://www.clipartsfree.net/vector/large/49491-small-green-dot-clipart.png" }} style={styles.iconimg} />
+            <View style={styles.column}>
+              <Text style={{ fontSize: 20, fontFamily: "Prompt_400Regular", }}>
+                {props.data.name}
+              </Text>
+              <Text style={{ fontSize: 16, fontFamily: "Prompt_400Regular", }}>
+                {props.data.branch}
+              </Text>
+            </View>
           </View>
-          <TouchableOpacity style={styles.bt} onPress={props.onManage}>
-            <Text style={{ fontSize: 16, fontFamily: "Prompt_400Regular", }}>จัดการ</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.bt} onPress={props.onEdit}>
-            <Text style={{ fontSize: 16, fontFamily: "Prompt_400Regular", }}>แก้ไข</Text>
-          </TouchableOpacity>
-        </View>
-      </Card>
+        </Card>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -75,4 +70,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Locationitem;
+export default LocationItem;

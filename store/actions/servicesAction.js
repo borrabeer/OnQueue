@@ -3,6 +3,8 @@ import Axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from "react-native";
 import NavigationService from '../../NavigationService';
+import { useDispatch } from "react-redux";
+
 const BaseURL = "onqueue-api.herokuapp.com"
 export const getCategories = () => {
     return (dispatch) => {
@@ -72,7 +74,9 @@ export const getManageServices = (token, shop_id) => {
                     type: Action.SET_MANAGE_SERVICE,
                     payload: data.data
                 })
-                NavigationService.navigate("manageService");
+                NavigationService.navigate("manageService", {
+                    shop_id: shop_id
+                });
             })
             .catch((e) => {
                 console.log(e.response);
@@ -97,6 +101,54 @@ export const getEditShop = (token, shop_id) => {
                     payload: data.data
                 })
                 NavigationService.navigate("locationEdit", {
+                    shop_id: data.data.id,
+                })
+            })
+            .catch(() => {
+                dispatch({
+                    type: Action.SHOPS_ERROR
+                })
+            })
+    }
+}
+
+export const getEditService = (token, service_id) => {
+    return (dispatch) => {
+        Axios.get(`https://${BaseURL}/services/detail/${service_id}/`, {
+            headers: {
+                "Authorization": "Bearer " + token,
+            }
+        })
+            .then(data => {
+                dispatch({
+                    type: Action.SET_EDIT_SERVICE,
+                    payload: data.data
+                })
+                NavigationService.navigate("serviceEdit", {
+                    shop_id: data.data.id,
+                })
+            })
+            .catch(() => {
+                dispatch({
+                    type: Action.SERVICES_ERROR
+                })
+            })
+    }
+}
+
+export const getManageShopItem = (token, shop_id) => {
+    return (dispatch) => {
+        Axios.get(`https://${BaseURL}/shops/detail/${shop_id}/`, {
+            headers: {
+                "Authorization": "Bearer " + token,
+            }
+        })
+            .then(data => {
+                dispatch({
+                    type: Action.SET_EDIT_SHOP,
+                    payload: data.data
+                })
+                NavigationService.navigate("locationItem", {
                     shop_id: data.data.id,
                 })
             })
@@ -148,7 +200,6 @@ export const getQueue = (queue_id, token) => {
 
 export const getQueueHistory = (token) => {
     return (dispatch) => {
-        console.log('a');
         Axios.get(`https://${BaseURL}/services/queue/history/`, {
             headers: {
                 "Authorization": "Bearer " + token,
@@ -167,14 +218,14 @@ export const getQueueHistory = (token) => {
                         "Alert",
                         "ไม่พบประวัติการใช้งานของคุณ ต้องการจองคิวหรือไม่",
                         [
-                          {
-                            text: "ยกเลิก",
-                            style: "cancel"
-                          },
-                          { text: "จองคิว", onPress: () => NavigationService.navigate("categories") }
+                            {
+                                text: "ยกเลิก",
+                                style: "cancel"
+                            },
+                            { text: "จองคิว", onPress: () => NavigationService.navigate("categories") }
                         ],
                         { cancelable: false }
-                      );
+                    );
                 }
                 dispatch({
                     type: Action.QUEUE_ERRORS,
@@ -316,15 +367,22 @@ export const createShop = (token, shopData) => {
                         }
                     })
                         .then(data => {
-                            Alert.alert("Create Success!", "สร้างร้านค้าสำเร็จ!",
-                                [
-                                    {
-                                        text: "ตกลง", onPress: () => {
-                                            getManageShops(token);
+                            if (data.status === 201) {
+                                Alert.alert("Create Success!", "สร้างร้านค้าสำเร็จ!",
+                                    [
+                                        {
+                                            text: "ตกลง", onPress: () => {
+                                                dispatch(getManageShops(token));
+                                            }
                                         }
-                                    }
-                                ],
-                                { cancelable: false })
+                                    ],
+                                    { cancelable: false })
+                            } else {
+                                dispatch({
+                                    type: Action.SET_LOADING,
+                                    data: false,
+                                })
+                            }
                         })
                         .catch(e => {
                             dispatch({
@@ -337,6 +395,41 @@ export const createShop = (token, shopData) => {
             .catch(e => {
                 dispatch({
                     type: Action.SHOPS_ERROR,
+                    payload: e
+                })
+            })
+    }
+}
+
+export const createService = (token, serviceData) => {
+    return (dispatch) => {
+        Axios.post(`https://${BaseURL}/services/create/${serviceData.shop_id}/`, {
+            shop_id: serviceData.shop_id,
+            service_name: serviceData.service_name,
+            waiting_time: serviceData.waiting_time,
+            status: serviceData.status,
+        }, {
+            headers: {
+                "Authorization": "Bearer " + token,
+            }
+        })
+            .then(data => {
+                if (data.status === 201) {
+                    Alert.alert("Create Success!", "สร้างบริการสำเร็จ!",
+                        [
+                            {
+                                text: "ตกลง", onPress: () => {
+                                    dispatch(getManageServices(token, serviceData.shop_id));
+                                }
+                            }
+                        ],
+                        { cancelable: false })
+                }
+                console.log(data.data);
+            })
+            .catch(e => {
+                dispatch({
+                    type: Action.SERVICES_ERROR,
                     payload: e
                 })
             })
@@ -370,7 +463,7 @@ export const setEditShop = (token, shop_id, shopData) => {
                                 [
                                     {
                                         text: "ตกลง", onPress: () => {
-                                            getManageShops(token);
+                                            dispatch(getManageShops(token));
                                         }
                                     }
                                 ],
@@ -416,8 +509,7 @@ export const setEditShop = (token, shop_id, shopData) => {
                                         [
                                             {
                                                 text: "ตกลง", onPress: () => {
-                                                    getManageShops(token);
-                                                    NavigationService.navigate("manageLocation");
+                                                    dispatch(getManageShops(token));
                                                 }
                                             }
                                         ],
@@ -455,5 +547,95 @@ export const userLogout = () => {
             type: Action.USER_LOGOUT
         })
         Alert.alert('Logged Out!', 'คุณได้ล็อกเอาท์แล้ว !');
+    }
+}
+
+export const setEditService = (token, service_id, serviceData) => {
+    return (dispatch) => {
+        Axios.put(`https://${BaseURL}/services/edit/${service_id}/`, {
+            service_name: serviceData.service_name,
+            status: serviceData.status,
+            waiting_time: serviceData.waiting_time,
+        }, {
+            headers: {
+                "Authorization": "Bearer " + token,
+            }
+        })
+            .then(data => {
+                Alert.alert("Edit Success!", "แก้ไขบริการสำเร็จ!",
+                    [
+                        {
+                            text: "ตกลง", onPress: () => {
+                                dispatch(getManageServices(token, serviceData.shop_id));
+                            }
+                        }
+                    ],
+                    { cancelable: false })
+            })
+            .catch(e => {
+                dispatch({
+                    type: Action.SERVICES_ERROR,
+                    payload: e
+                })
+            })
+    }
+}
+
+
+export const deleteShop = (token, shop_id) => {
+    return (dispatch) => {
+        Axios.delete(`https://${BaseURL}/shops/delete/${shop_id}/`, {
+            headers: {
+                "Authorization": "Bearer " + token,
+            }
+        })
+            .then(data => {
+                if (data.status === 200) {
+                    Alert.alert("Delete Success!", "ลบร้านค้าสำเร็จ!",
+                        [
+                            {
+                                text: "ตกลง", onPress: () => {
+                                    dispatch(getManageShops(token));
+                                }
+                            }
+                        ],
+                        { cancelable: false })
+                }
+            })
+            .catch((e) => {
+                dispatch({
+                    type: Action.SHOPS_ERROR,
+                    payload: e
+                })
+            })
+    }
+}
+
+export const deleteService = (token, service_id, shop_id) => {
+    return (dispatch) => {
+        Axios.delete(`https://${BaseURL}/services/delete/${service_id}/`, {
+            headers: {
+                "Authorization": "Bearer " + token,
+            }
+        })
+            .then(data => {
+                if (data.status === 200) {
+                    Alert.alert("Delete Success!", "ลบบริการสำเร็จ!",
+                        [
+                            {
+                                text: "ตกลง", onPress: () => {
+                                    dispatch(getManageServices(token, shop_id));
+                                }
+                            }
+                        ],
+                        { cancelable: false })
+                }
+            })
+            .catch((e) => {
+                dispatch({
+                    type: Action.SERVICES_ERROR,
+                    payload: e
+                })
+            })
     }
 }

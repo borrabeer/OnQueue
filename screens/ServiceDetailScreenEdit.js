@@ -16,36 +16,39 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import { createShop, setLoading, createService } from "../store/actions/servicesAction";
+import { createShop, setLoading, setEditService, deleteService } from "../store/actions/servicesAction";
 
-const ServiceDetailScreen = (props) => {
+const ServiceDetailScreenEdit = (props) => {
   const dispatch = useDispatch();
   const setLoadingHandler = (bool) => {
     dispatch(setLoading(bool));
   }
-
-  const [serviceName, setServiceName] = useState(null);
-  const [waitingTime, setWaitingTime] = useState(1);
-  const [isEnabled, setIsEnabled] = useState(false);
+  const editService = useSelector(state => state.services.editService);
+  const [serviceName, setServiceName] = useState(editService.name);
+  const [waitingTime, setWaitingTime] = useState(editService.estimated);
+  const [isEnabled, setIsEnabled] = useState(editService.status);
   const isLoading = useSelector(state => state.services.isLoading);
   const userToken = useSelector(state => state.services.userToken);
   const shop_id = props.navigation.getParam("shop_id");
-  const createServiceHandler = () => {
+  const setEditServiceHandler = () => {
     if (serviceName === null || serviceName === "" || serviceName === " ") {
       Alert.alert("Information", "กรุณาใส่ชื่อบริการ")
     }
-    else if (waitingTime === null || waitingTime === "" || waitingTime === " " || typeof waitingTime != "number") {
+    else if (waitingTime === null || waitingTime === "" || waitingTime === " ") {
       Alert.alert("Information", "กรุณาระบุเวลารอคิวโดยประมาณ")
     }
     else {
       setLoadingHandler(true);
-      dispatch(createService(userToken, {
-        shop_id: shop_id,
+      dispatch(setEditService(userToken, editService.id, {
+        shop_id: editService.shop.id,
         service_name: serviceName,
-        waiting_time: waitingTime,
+        waiting_time: Number.parseInt(waitingTime),
         status: isEnabled,
       }))
     }
+  }
+  const deleteServiceHandler = (token, id, shop_id) => {
+    dispatch(deleteService(token, id, shop_id));
   }
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   if (isLoading) {
@@ -109,14 +112,37 @@ const ServiceDetailScreen = (props) => {
           />
 
         </View>
-        <TouchableOpacity style={{ ...styles.button }} onPress={createServiceHandler}>
-          <Text style={[styles.fontButton, { fontSize: 25, color: "#ffffff" }]}>ยืนยันข้อมูลบริการ</Text>
+        <TouchableOpacity style={{ ...styles.button }} onPress={setEditServiceHandler}>
+          <Text style={[styles.fontButton, { fontSize: 25, color: "#ffffff" }]}>แก้ไขข้อมูลบริการ</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{ ...styles.button, backgroundColor: "#c25e5e", }} onPress={() => {
+          Alert.alert(
+            "Alert",
+            "ต้องการลบร้านค้านี้จริงหรือไม่ ?",
+            [
+              {
+                text: "ยกเลิก",
+                style: "cancel"
+              },
+              {
+                text: "ยืนยัน",
+                onPress: () => {
+                  setLoadingHandler(true);
+                  deleteServiceHandler(userToken, editService.id, editService.shop.id)
+                },
+                style: "destructive"
+              }
+            ],
+            { cancelable: false }
+          );
+        }}>
+          <Text style={[styles.fontButton, { fontSize: 25, color: "#ffffff" }]}>ลบบริการนี้</Text>
         </TouchableOpacity>
       </ScrollView>
     </View>
   );
 };
-ServiceDetailScreen.navigationOptions = (navigationData) => {
+ServiceDetailScreenEdit.navigationOptions = (navigationData) => {
   return {
     headerTitle: "เพิ่มบริการ",
   }
@@ -251,4 +277,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ServiceDetailScreen;
+export default ServiceDetailScreenEdit;
