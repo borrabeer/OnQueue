@@ -24,8 +24,11 @@ const Locationitem = (props) => {
               {props.data.branch}
             </Text>
           </View>
-          <TouchableOpacity style={styles.bt}>
+          <TouchableOpacity style={styles.bt} onPress={props.onManage}>
             <Text style={{ fontSize: 16, fontFamily: "Prompt_400Regular", }}>จัดการ</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.bt} onPress={props.onEdit}>
+            <Text style={{ fontSize: 16, fontFamily: "Prompt_400Regular", }}>แก้ไข</Text>
           </TouchableOpacity>
         </View>
       </Card>

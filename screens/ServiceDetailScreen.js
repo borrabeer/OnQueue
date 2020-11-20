@@ -21,7 +21,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import * as ImagePicker from 'expo-image-picker';
 import { createShop, setLoading } from "../store/actions/servicesAction";
 
-const LocationScreen = (props) => {
+const ServiceDetailScreen = (props) => {
   const dispatch = useDispatch();
   const setLoadingHandler = (bool) => {
     dispatch(setLoading(bool));
@@ -214,7 +214,7 @@ const LocationScreen = (props) => {
     </View>
   );
 };
-LocationScreen.navigationOptions = (navigationData) => {
+ServiceDetailScreen.navigationOptions = (navigationData) => {
   return {
     headerTitle: "เพิ่มสถานที่",
   }
@@ -349,4 +349,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LocationScreen;
+export default ServiceDetailScreen;

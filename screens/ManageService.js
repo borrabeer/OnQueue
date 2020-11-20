@@ -14,21 +14,18 @@ import { SearchBar } from 'react-native-elements'
 import { useDispatch, useSelector } from "react-redux";
 import LocationItem from "../components/LocationItem";
 import NavigationService from "../NavigationService";
-import { setLoading, getEditShop, getManageServices } from "../store/actions/servicesAction";
+import { setLoading, getEditShop } from "../store/actions/servicesAction";
 
-const ManageLocation = (props) => {
+const ManageService = (props) => {
   const isLoading = useSelector(state => state.services.isLoading);
   const userToken = useSelector(state => state.services.userToken);
-  const availableShops = useSelector(state => state.services.manageShops);
+  const availableServices = useSelector(state => state.services.manageServices);
   const dispatch = useDispatch();
   const setLoadingHandler = (bool) => {
     dispatch(setLoading(bool))
   }
   const getEditShopHandler = (token, id) => {
     dispatch(getEditShop(token, id));
-  }
-  const getManageServicesHandler = (token, id) => {
-    dispatch(getManageServices(token, id));
   }
   if (isLoading) {
     return (
@@ -37,18 +34,14 @@ const ManageLocation = (props) => {
       </View>
     )
   }
-  const renderLocationItem = (itemData) => {
+  const renderServiceItem = (itemData) => {
     return (
 
       <LocationItem
         data={itemData.item.shop}
         onEdit={() => {
-          setLoadingHandler(true);
-          getEditShopHandler(userToken, itemData.item.shop.id);
-        }}
-        onManage={() => {
-          setLoadingHandler(true);
-          getManageServicesHandler(userToken, itemData.item.shop.id);
+          // setLoadingHandler(true);
+          // getEditShopHandler(userToken, itemData.item.shop.id);
         }}
       />
     )
@@ -61,13 +54,13 @@ const ManageLocation = (props) => {
       // onChangeText={this.updateSearch}
       // value={search}
       />
-      <FlatList data={availableShops} renderItem={renderLocationItem} numColumns={1} />
+      <FlatList data={availableServices} renderItem={renderServiceItem} numColumns={1} />
 
       <TouchableOpacity style={styles.bt} onPress={() => {
-        NavigationService.navigate("locationScreen")
+        // NavigationService.navigate("locationScreen")
       }}>
         <Text style={styles.text} >
-          เพิ่มสถานที่
+          เพิ่มบริการ
         </Text>
       </TouchableOpacity>
     </ScrollView>
@@ -97,4 +90,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default ManageLocation;
+export default ManageService;

@@ -16,11 +16,12 @@ import UserGridTile from "../components/UserGridTile";
 import { useSelector, useDispatch } from "react-redux";
 import { USERFUNCTION, STAFFFUNCTION } from "../data/dummy-data";
 import * as Action from "../store/types";
-import { userLogout } from "../store/actions/servicesAction";
+import { userLogout, getManageShops, setLoading, getQueueHistory } from "../store/actions/servicesAction";
 import NavigationService from "../NavigationService";
 
 const UserManagement = (props) => {
   const userData = useSelector(state => state.services.userData);
+  const userToken = useSelector(state => state.services.userToken);
   let isStaff = false;
   for (let index = 0; index < userData.user.groups.length; index++) {
     const element = userData.user.groups[index];
@@ -32,17 +33,27 @@ const UserManagement = (props) => {
   const userLogoutHandler = () => {
     dispatch(userLogout());
   }
+  const setLoadingHandler = (bool) => {
+    dispatch(setLoading(bool));
+  }
+  const getManageShopsHandler = (token) => {
+    dispatch(getManageShops(token));
+  }
+  const getQueueHistoryHandler = (token) => {
+    dispatch(getQueueHistory(token));
+  }
   const UserFunctionOnPress = (id) => {
     switch (id) {
       case Action.USER_LOGOUT:
         userLogoutHandler();
-        Alert.alert('Logged Out!', 'คุณได้ล็อกเอาท์แล้ว !');
         break;
       case Action.QUEUE_HISTORY:
-        NavigationService.navigate("queueHistory")
+        setLoadingHandler(true);
+        getQueueHistoryHandler(userToken);
         break;
       case Action.SHOP_MANAGE:
-        NavigationService.navigate("manageLocation")
+        setLoadingHandler(true);
+        getManageShopsHandler(userToken);
         break;
       default:
         console.log(id);

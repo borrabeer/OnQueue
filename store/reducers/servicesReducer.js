@@ -4,7 +4,10 @@ const initialState = {
     categories: [],
     shops: [],
     manageShops: [],
+    editShop: null,
     services: [],
+    manageServices: [],
+    editService: null,
     queuesHistory: [],
     queue: [],
     isLoading: true,
@@ -33,10 +36,22 @@ const serviceReducer = (state = initialState, action) => {
                 manageShops: action.payload,
                 isLoading: false,
             }
-        case Action.ADD_MANAGE_SHOP:
+        case Action.SET_MANAGE_SERVICE:
             return {
                 ...state,
-                manageShops: state.manageShops.concat(action.payload),
+                manageServices: action.payload,
+                isLoading: false,
+            }
+        case Action.SET_EDIT_SHOP:
+            return {
+                ...state,
+                editShop: action.payload,
+                isLoading: false,
+            }
+        case Action.SET_EDIT_SERVICE:
+            return {
+                ...state,
+                editService: action.payload,
                 isLoading: false,
             }
         case Action.GET_SERVICES:
@@ -86,7 +101,32 @@ const serviceReducer = (state = initialState, action) => {
         case Action.USER_ERROR:
             console.log(action.payload);
             return {
-                ...state
+                ...state,
+                isLoading: false,
+            }
+        case Action.CATEGORIES_ERROR:
+            console.log(action.payload);
+            return {
+                ...state,
+                isLoading: false,
+            }
+        case Action.QUEUE_ERRORS:
+            console.log(action.payload);
+            return {
+                ...state,
+                isLoading: false,
+            }
+        case Action.SERVICES_ERROR:
+            console.log(action.payload);
+            return {
+                ...state,
+                isLoading: false,
+            }
+        case Action.SHOPS_ERROR:
+            console.log(action.payload);
+            return {
+                ...state,
+                isLoading: false,
             }
         case Action.USER_LOGOUT:
             return {

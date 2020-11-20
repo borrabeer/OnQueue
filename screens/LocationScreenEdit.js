@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -19,13 +19,15 @@ import { useSelector, useDispatch } from "react-redux";
 import DateTimePickerIOS from "../components/DateTimePickerIOS";
 import DropDownPicker from 'react-native-dropdown-picker';
 import * as ImagePicker from 'expo-image-picker';
-import { createShop, setLoading } from "../store/actions/servicesAction";
+import { createShop, getEditShop, setLoading, setEditShop } from "../store/actions/servicesAction";
 
-const LocationScreen = (props) => {
+const LocationScreenEdit = (props) => {
   const dispatch = useDispatch();
   const setLoadingHandler = (bool) => {
     dispatch(setLoading(bool));
   }
+  const shop_id = props.navigation.getParam("shop_id");
+  const editShop = useSelector(state => state.services.editShop)
   useEffect(() => {
     (async () => {
       if (Platform.OS !== 'web') {
@@ -36,14 +38,18 @@ const LocationScreen = (props) => {
       }
     })();
   }, []);
-  const [shopName, setShopName] = useState(null);
-  const [branchName, setBranchName] = useState(null);
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [shopName, setShopName] = useState(editShop.name);
+  const [branchName, setBranchName] = useState(editShop.branch);
+  const [isEnabled, setIsEnabled] = useState(editShop.status);
   const [showOpen, setShowOpen] = useState(false);
   const [showClose, setShowClose] = useState(false);
-  const [openTime, setOpenTime] = useState(new Date());
-  const [closeTime, setCloseTime] = useState(new Date());
-  const [image, setImage] = useState(null);
+  const currentDate = new Date();
+  const [openTime, setOpenTime] = useState(new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), editShop.open_time[0] + editShop.open_time[1], editShop.open_time[3] + editShop.open_time[4]));
+  const [closeTime, setCloseTime] = useState(new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), editShop.close_time[0] + editShop.close_time[1], editShop.close_time[3] + editShop.close_time[4]));
+  const [image, setImage] = useState({
+    type: "image",
+    uri: editShop.icon_url
+  });
   const isLoading = useSelector(state => state.services.isLoading);
   const availableCategories = useSelector(state => state.services.categories);
   const userToken = useSelector(state => state.services.userToken);
@@ -55,12 +61,12 @@ const LocationScreen = (props) => {
     };
     categoriesData.push(element);
   }
-  const [category, setCategory] = useState(categoriesData ? categoriesData[0].value : null);
+  const [category, setCategory] = useState(editShop != null && editShop != [] ? editShop.category : categoriesData ? categoriesData[0].value : null);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   const formatDate = (time) => {
     return `${time.getHours()}:${time.getMinutes()}`;
   };
-  const createShopHandler = () => {
+  const setEditShopHandler = () => {
     if (category === null) {
       Alert.alert("Information", "กรุณาเลือกประเภทของร้าน")
     }
@@ -80,8 +86,8 @@ const LocationScreen = (props) => {
       Alert.alert("Information", "กรุณาใส่เวลารูปภาพของร้าน")
     }
     else {
-      setLoadingHandler(true);
-      dispatch(createShop(userToken, {
+      // setLoadingHandler(true);
+      dispatch(setEditShop(userToken, shop_id, {
         category_id: category,
         shop_name: shopName,
         branch_name: branchName,
@@ -101,6 +107,7 @@ const LocationScreen = (props) => {
     });
 
     if (!result.cancelled) {
+      // console.log(result);
       setImage(result);
     }
   };
@@ -185,8 +192,8 @@ const LocationScreen = (props) => {
           <Text style={[styles.fontButton, { fontSize: 25, color: "#ffffff" }]}>เลือกรูปภาพ</Text>
         </TouchableOpacity>
         {image && <View style={{ justifyContent: "center", alignItems: "center" }}><Image source={{ uri: image.uri }} style={{ width: 200, height: 200 }} /></View>}
-        <TouchableOpacity style={{ ...styles.button }} onPress={createShopHandler}>
-          <Text style={[styles.fontButton, { fontSize: 25, color: "#ffffff" }]}>{"ยืนยันข้อมูลสถานที่"}</Text>
+        <TouchableOpacity style={{ ...styles.button }} onPress={setEditShopHandler}>
+          <Text style={[styles.fontButton, { fontSize: 25, color: "#ffffff" }]}>ยืนยันการแก้ไข</Text>
         </TouchableOpacity>
       </ScrollView>
       {showOpen && (
@@ -214,9 +221,9 @@ const LocationScreen = (props) => {
     </View>
   );
 };
-LocationScreen.navigationOptions = (navigationData) => {
+LocationScreenEdit.navigationOptions = (navigationData) => {
   return {
-    headerTitle: "เพิ่มสถานที่",
+    headerTitle: "แก้ไขสถานที่",
   }
 };
 
@@ -349,4 +356,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LocationScreen;
+export default LocationScreenEdit;

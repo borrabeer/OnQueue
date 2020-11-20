@@ -46,10 +46,58 @@ export const getManageShops = (token) => {
             }
         })
             .then(data => {
-                console.log(data.data);
                 dispatch({
                     type: Action.SET_MANAGE_SHOP,
                     payload: data.data
+                })
+                NavigationService.navigate("manageLocation");
+            })
+            .catch(() => {
+                dispatch({
+                    type: Action.SHOPS_ERROR
+                })
+            })
+    }
+}
+
+export const getManageServices = (token, shop_id) => {
+    return (dispatch) => {
+        Axios.get(`https://${BaseURL}/services/manage/${shop_id}/`, {
+            headers: {
+                "Authorization": "Bearer " + token,
+            }
+        })
+            .then(data => {
+                dispatch({
+                    type: Action.SET_MANAGE_SERVICE,
+                    payload: data.data
+                })
+                NavigationService.navigate("manageService");
+            })
+            .catch((e) => {
+                console.log(e.response);
+                dispatch({
+                    type: Action.SHOPS_ERROR,
+                    payload: e
+                })
+            })
+    }
+}
+
+export const getEditShop = (token, shop_id) => {
+    return (dispatch) => {
+        Axios.get(`https://${BaseURL}/shops/detail/${shop_id}/`, {
+            headers: {
+                "Authorization": "Bearer " + token,
+            }
+        })
+            .then(data => {
+                dispatch({
+                    type: Action.SET_EDIT_SHOP,
+                    payload: data.data
+                })
+                NavigationService.navigate("locationEdit", {
+                    shop_id: data.data.id,
                 })
             })
             .catch(() => {
@@ -100,6 +148,7 @@ export const getQueue = (queue_id, token) => {
 
 export const getQueueHistory = (token) => {
     return (dispatch) => {
+        console.log('a');
         Axios.get(`https://${BaseURL}/services/queue/history/`, {
             headers: {
                 "Authorization": "Bearer " + token,
@@ -110,10 +159,26 @@ export const getQueueHistory = (token) => {
                     type: Action.SET_QUEUES,
                     payload: data.data
                 })
+                NavigationService.navigate("queueHistory")
             })
-            .catch(() => {
+            .catch((e) => {
+                if (e.response.status === 400) {
+                    Alert.alert(
+                        "Alert",
+                        "ไม่พบประวัติการใช้งานของคุณ ต้องการจองคิวหรือไม่",
+                        [
+                          {
+                            text: "ยกเลิก",
+                            style: "cancel"
+                          },
+                          { text: "จองคิว", onPress: () => NavigationService.navigate("categories") }
+                        ],
+                        { cancelable: false }
+                      );
+                }
                 dispatch({
-                    type: Action.QUEUE_ERRORS
+                    type: Action.QUEUE_ERRORS,
+                    payload: e
                 })
             })
     }
@@ -153,7 +218,7 @@ export const getUserData = (id, email, name, image) => {
             image: image,
         })
             .then(data => {
-                console.log(data.data);
+                // console.log(data.data);
                 dispatch({
                     type: Action.SET_USER_DATA,
                     payload: data.data
@@ -175,7 +240,7 @@ export const validateUserToken = (token) => {
             }
         })
             .then(data => {
-                console.log(data.data);
+                // console.log(data.data);
                 dispatch({
                     type: Action.SET_USER_DATA_TOKEN,
                     data: data.data,
@@ -236,7 +301,7 @@ export const createShop = (token, shopData) => {
         })
             .then(data => {
                 if (data.status === 200) {
-                    console.log(data.data.data.link);
+                    // console.log(data.data.data.link);
                     Axios.post(`https://${BaseURL}/shops/create/`, {
                         category_id: shopData.category_id,
                         shop_name: shopData.shop_name,
@@ -255,11 +320,7 @@ export const createShop = (token, shopData) => {
                                 [
                                     {
                                         text: "ตกลง", onPress: () => {
-                                            dispatch({
-                                                type: Action.ADD_MANAGE_SHOP,
-                                                payload: data.data
-                                            })
-                                            NavigationService.navigate("manageLocation");
+                                            getManageShops(token);
                                         }
                                     }
                                 ],
@@ -282,6 +343,104 @@ export const createShop = (token, shopData) => {
     }
 }
 
+export const setEditShop = (token, shop_id, shopData) => {
+    return (dispatch) => {
+        Axios.get(`https://api.imgur.com/3/image/${shopData.image.uri.substring(20, shopData.image.uri.indexOf(".", 19))}`, {
+            headers: {
+                "Authorization": "Client-ID 415d9499bd03c8e",
+            }
+        })
+            .then(data => {
+                if (data.status === 200) {
+                    Axios.put(`https://${BaseURL}/shops/edit/${shop_id}/`, {
+                        category_id: shopData.category_id,
+                        shop_name: shopData.shop_name,
+                        branch_name: shopData.branch_name,
+                        open_time: shopData.open_time,
+                        close_time: shopData.close_time,
+                        status: shopData.status,
+                        image: shopData.image.uri
+                    }, {
+                        headers: {
+                            "Authorization": "Bearer " + token,
+                        }
+                    })
+                        .then(data => {
+                            Alert.alert("Edit Success!", "แก้ไขร้านค้าสำเร็จ!",
+                                [
+                                    {
+                                        text: "ตกลง", onPress: () => {
+                                            getManageShops(token);
+                                        }
+                                    }
+                                ],
+                                { cancelable: false })
+                        })
+                        .catch(e => {
+                            dispatch({
+                                type: Action.SHOPS_ERROR,
+                                payload: e
+                            })
+                        })
+                }
+            })
+            .catch(e => {
+                let formData = new FormData();
+                formData.append("image", {
+                    uri: shopData.image.uri,
+                    type: shopData.image.type,
+                    name: shopData.shop_name,
+                })
+                Axios.post('https://api.imgur.com/3/image/', formData, {
+                    headers: {
+                        "Authorization": "Client-ID 415d9499bd03c8e",
+                    }
+                })
+                    .then(data => {
+                        if (data.status === 200) {
+                            Axios.put(`https://${BaseURL}/shops/edit/${shop_id}/`, {
+                                category_id: shopData.category_id,
+                                shop_name: shopData.shop_name,
+                                branch_name: shopData.branch_name,
+                                open_time: shopData.open_time,
+                                close_time: shopData.close_time,
+                                status: shopData.status,
+                                image: data.data.data.link
+                            }, {
+                                headers: {
+                                    "Authorization": "Bearer " + token,
+                                }
+                            })
+                                .then(data => {
+                                    Alert.alert("Edit Success!", "แก้ไขร้านค้าสำเร็จ!",
+                                        [
+                                            {
+                                                text: "ตกลง", onPress: () => {
+                                                    getManageShops(token);
+                                                    NavigationService.navigate("manageLocation");
+                                                }
+                                            }
+                                        ],
+                                        { cancelable: false })
+                                })
+                                .catch(e => {
+                                    dispatch({
+                                        type: Action.SHOPS_ERROR,
+                                        payload: e
+                                    })
+                                })
+                        }
+                    })
+                    .catch(e => {
+                        dispatch({
+                            type: Action.SHOPS_ERROR,
+                            payload: e
+                        })
+                    })
+            })
+    }
+}
+
 export const setLoading = (bool) => {
     return {
         type: Action.SET_LOADING,
@@ -295,5 +454,6 @@ export const userLogout = () => {
         dispatch({
             type: Action.USER_LOGOUT
         })
+        Alert.alert('Logged Out!', 'คุณได้ล็อกเอาท์แล้ว !');
     }
 }

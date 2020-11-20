@@ -36,7 +36,7 @@ const ServiceScreen = (props) => {
     };
     servicesData.push(element);
   }
-  const [SelectService, setSelectService] = useState(servicesData[0] != null ? servicesData[0].value : null);
+  const [SelectService, setSelectService] = useState(null);
   const dispatch = useDispatch();
   const getServicesHandler = (shop_id) => {
     dispatch(getServices(shop_id))

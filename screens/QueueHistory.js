@@ -12,24 +12,11 @@ import {
 } from "react-native";
 import QueueItem from "../components/QueueItem";
 import { useSelector, useDispatch } from "react-redux";
-import { getQueueHistory, setLoading } from "../store/actions/servicesAction";
 import NavigationService from "../NavigationService";
 
 const QueueHistory = (props) => {
   const isLoading = useSelector(state => state.services.isLoading);
-  const userToken = useSelector(state => state.services.userToken);
   const currentQueue = useSelector(state => state.services.queuesHistory);
-  const dispatch = useDispatch();
-  const getQueueHistoryHandler = () => {
-    dispatch(getQueueHistory(userToken));
-  }
-  const setLoadingHandler = (bool) => {
-    dispatch(setLoading(bool));
-  }
-  useEffect(() => {
-    setLoadingHandler(true);
-    getQueueHistoryHandler();
-  }, [])
   const renderQueueItem = (itemData) => {
     return (
       <QueueItem
