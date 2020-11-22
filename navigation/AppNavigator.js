@@ -21,6 +21,7 @@ import ServiceDetailScreen from "../screens/ServiceDetailScreen";
 import ServiceDetailScreenEdit from "../screens/ServiceDetailScreenEdit";
 import { Image } from "react-native";
 import ic_qrcode from "../assets/ic_qrcode.png"
+import ManagerListScreen from "../screens/ManagerListScreen";
 
 const ServicesNavigator = createStackNavigator(
   {
@@ -72,6 +73,7 @@ const UserServiceNavigator = createStackNavigator(
     serviceDetail: ServiceDetailScreen,
     serviceEdit: ServiceDetailScreenEdit,
     locationItem: ManageLocationItem,
+    managerList: ManagerListScreen,
   },
   {
     defaultNavigationOptions: {

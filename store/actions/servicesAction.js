@@ -639,3 +639,23 @@ export const deleteService = (token, service_id, shop_id) => {
             })
     }
 }
+
+export const getManageUser = (token, shop_id) => {
+    return (dispatch) => {
+        Axios.get(`https://${BaseURL}/users/manager/${shop_id}/`, {
+            headers: {
+                "Authorization": "Bearer " + token,
+            }
+        })
+            .then(data => {
+                console.log(data.data);
+            })
+            .catch((e) => {
+                console.log(e.response);
+                dispatch({
+                    type: Action.USER_ERROR,
+                    payload: e
+                })
+            })
+    }
+}
