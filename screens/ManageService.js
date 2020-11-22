@@ -49,25 +49,34 @@ const ManageService = (props) => {
     )
   }
   return (
-    <ScrollView>
-      <SearchBar
+
+    <View style={styles.screen}>
+      {/* <SearchBar style={{ height: 30 }}
+        round
         lightTheme
         placeholder="Type Here..."
+        containerStyle={{ width: "95%", backgroundColor: "#FFFFFF", borderRadius: 5 }}
+
       // onChangeText={this.updateSearch}
       // value={search}
       />
-      <FlatList data={availableServices} renderItem={renderServiceItem} numColumns={1} />
+       */}
+      <ScrollView>
+        <View style={styles.screen}>
+          <FlatList data={availableServices} renderItem={renderServiceItem} numColumns={1} />
 
-      <TouchableOpacity style={styles.bt} onPress={() => {
-        NavigationService.navigate("serviceDetail", {
-          shop_id: shop_id
-        })
-      }}>
-        <Text style={styles.text} >
-          เพิ่มบริการ
+          <TouchableOpacity style={styles.bt} onPress={() => {
+            NavigationService.navigate("serviceDetail", {
+              shop_id: shop_id
+            })
+          }}>
+            <Text style={styles.text} >
+              เพิ่มบริการ
         </Text>
-      </TouchableOpacity>
-    </ScrollView>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </View>
   )
 }
 
@@ -78,18 +87,27 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   bt: {
-    width: 300,
-    height: 80,
-    left: 40,
+    margin: 15,
+    borderRadius: 10,
+    shadowColor: "black",
+    shadowOpacity: 0.26,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 10,
+    elevation: 3,
+    padding: 3,
+    width: "60%",
+    height: 60,
     justifyContent: "center",
     backgroundColor: "#2E64FE",
+    width: 320,
+    position: "absolute",
+    top: 600
   },
   text: {
     color: "white",
     // justifyContent: "center",
-    left: 85,
     fontSize: 26,
-    position: "absolute",
+    textAlign: "center",
     fontFamily: "Prompt_400Regular"
   }
 })

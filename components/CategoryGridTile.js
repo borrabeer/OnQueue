@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     // alignItems: "flex-end",
   },
   title: {
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: "Prompt_400Regular",
     textAlign: "center",
   },

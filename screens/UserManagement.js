@@ -89,7 +89,7 @@ const UserManagement = (props) => {
         justifyContent: "flex-end",
         backgroundColor: "#ffffff"
       }}>
-
+        <View style={{ flex:1.5}} ></View>
         <FlatList renderItem={renderUserFunction} data={isStaff ? STAFFFUNCTION : USERFUNCTION} numColumns={2} />
         <TouchableHighlight
           style={styles.circle}
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
-    left: 93.5,
+    left: 105.5,
     bottom: 400,
     position: "absolute",
     opacity: 1.0,

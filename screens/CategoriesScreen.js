@@ -64,6 +64,7 @@ const CategoriesScreen = (props) => {
         <Text style={[styles.fontBold, { fontSize: 22 }]}>ยินดีต้อนรับสู่แอพพลิเคชั่น OnQueue</Text>
         <Text style={[styles.fontBold, { fontSize: 18 }]}>กรุณาเลือกหมวดหมู่ที่ต้องการใช้บริการ</Text>
       </View>
+      <View style={{ flex:1.5}} ></View>
       <FlatList data={availableCategories} renderItem={renderGridItem} numColumns={2} />
     </View>
   );

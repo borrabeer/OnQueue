@@ -10,6 +10,8 @@ const ShopList = (props) => {
         name={itemData.item.name}
         branch={itemData.item.branch}
         icon_url={itemData.item.icon_url}
+        open_time={itemData.item.open_time}
+        close_time={itemData.item.close_time}
         onSelectShop={() => {
           NavigationService.navigate("serviceScreen", {
             shop_id: itemData.item.id,
@@ -23,7 +25,7 @@ const ShopList = (props) => {
   return (
     <View style={styles.screen} >
       <FlatList
-        style={{ width: "100%" }}
+        style={{ width: "100%",backgroundColor: "#FFFFFF"  }}
         data={props.listData}
         renderItem={renderShopItem}
       />
@@ -33,9 +35,11 @@ const ShopList = (props) => {
 
 const styles = StyleSheet.create({
   screen: {
+    width: "95%",
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#FFFFFF",
   },
 });
 

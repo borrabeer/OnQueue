@@ -31,6 +31,9 @@ const ShopScreen = (props) => {
     setLoadingHandler(true);
     getShopsHandler(category_id);
   }, []);
+  const filteredContracts = React.useMemo(() => {
+    return availableShops.filter(availableShop => availableShop.name.includes(search));
+  }, [availableShops, search]);
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -40,18 +43,19 @@ const ShopScreen = (props) => {
   }
   return (
     <View style={styles.screen}>
-      <SearchBar
+      <SearchBar style={{height: 30}}
         round
         lightTheme
-        containerStyle={{ width: 343, backgroundColor: "white", borderRadius: 21 }}
+        containerStyle={{ width: "95%", backgroundColor: "white", borderRadius: 5 }}
         placeholder="ค้นหาที่นี่. . ."
         onChangeText={(text) => {
           setSearch(text)
         }}
         value={search} />
       <ShopList
-        listData={availableShops}
-        navigation={props.navigation} />
+        listData={filteredContracts}
+        navigation={props.navigation}
+        keyExtractor={(_, index) => index.toString()} />
     </View>
   );
 };
@@ -68,7 +72,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    margin: 5
+    margin: 5,
+    backgroundColor: "#FFFFFF",
   },
 });
 

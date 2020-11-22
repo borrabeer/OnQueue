@@ -129,7 +129,8 @@ const LocationScreenEdit = (props) => {
 
       <ScrollView style={{
         flex: 1,
-        margin: 20,
+        margin: 10,
+        width: "95%",
         height: 200,
         borderRadius: 10,
         shadowColor: "black",
@@ -148,6 +149,8 @@ const LocationScreenEdit = (props) => {
           containerStyle={{ height: 40 }}
           onChangeItem={item => setCategory(item)} multiple={true}
           multipleText="%d items have been selected."
+          style={{backgroundColor: '#fafafa',width: "95%", left: 8, }}
+
           min={0} />
         <Text style={{ ...styles.fontInput }}>   ชื่อร้าน</Text>
         <TextInput
@@ -166,11 +169,11 @@ const LocationScreenEdit = (props) => {
         <Text style={{ ...styles.fontInput }}>   เวลาเปิด</Text>
         <TouchableOpacity style={{ ...styles.input }} onPress={() => {
           setShowOpen(true);
-        }}><Text>{formatDate(openTime)}</Text></TouchableOpacity>
+        }}><Text style={{ ...styles.fontTime }}>{formatDate(openTime)}</Text></TouchableOpacity>
         <Text style={{ ...styles.fontInput }}>   เวลาปิด</Text>
         <TouchableOpacity style={{ ...styles.input }} onPress={() => {
           setShowClose(true);
-        }}><Text>{formatDate(closeTime)}</Text></TouchableOpacity>
+        }}><Text style={{ ...styles.fontTime }}>{formatDate(closeTime)}</Text></TouchableOpacity>
         <View style={{
           flex: 1,
           marginRight: 15,
@@ -180,8 +183,8 @@ const LocationScreenEdit = (props) => {
 
 
 
-          <Text style={{ ...styles.fontInput }}>   สถานะ</Text>
-          <Switch style={{}}
+          <Text style={{ ...styles.fontInput,marginTop: 10,}}>   สถานะ</Text>
+          <Switch style={{marginTop: 10}}
             trackColor={{ false: "#ffffff", true: "#60c459" }}
             thumbColor={isEnabled ? "#ffffff" : "#ffffff"}
             ios_backgroundColor="#c25e5e"
@@ -191,10 +194,11 @@ const LocationScreenEdit = (props) => {
 
         </View>
         <Text style={{ ...styles.fontInput }}>   รูปภาพ</Text>
-        <TouchableOpacity onPress={pickImage} style={{ ...styles.button }}>
+        
+        {image && <View style={{ justifyContent: "center", alignItems: "center" }}><Image source={{ uri: image.uri }} style={{ width: 200, height: 200 }} /></View>}
+        <TouchableOpacity onPress={pickImage} style={{ ...styles.buttonImage }}>
           <Text style={[styles.fontButton, { fontSize: 25, color: "#ffffff" }]}>เลือกรูปภาพ</Text>
         </TouchableOpacity>
-        {image && <View style={{ justifyContent: "center", alignItems: "center" }}><Image source={{ uri: image.uri }} style={{ width: 200, height: 200 }} /></View>}
         <TouchableOpacity style={{ ...styles.button }} onPress={setEditShopHandler}>
           <Text style={[styles.fontButton, { fontSize: 25, color: "#ffffff" }]}>ยืนยันการแก้ไข</Text>
         </TouchableOpacity>
@@ -255,6 +259,21 @@ LocationScreenEdit.navigationOptions = (navigationData) => {
 
 
 const styles = StyleSheet.create({
+  buttonImage: {
+    margin: 15,
+    borderRadius: 10,
+    shadowColor: "black",
+    shadowOpacity: 0.26,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 10,
+    elevation: 3,
+    padding: 3,
+    justifyContent: "flex-end",
+    backgroundColor: "#44bcd8",
+    height: 50,
+    // position: 'absolute',
+    width: 340,
+  },
 
   button: {
     margin: 15,
@@ -271,6 +290,13 @@ const styles = StyleSheet.create({
     // position: 'absolute',
     width: 340,
   },
+  fontTime: {
+    textAlign: "center",
+    fontSize: 26,
+    fontWeight: "bold",
+    fontFamily: "Prompt_400Regular",
+
+  },
   fontButton: {
     fontWeight: "bold",
     fontFamily: "Prompt_400Regular",
@@ -278,6 +304,9 @@ const styles = StyleSheet.create({
 
   },
   fontInput: {
+    marginTop:5,
+    fontSize: 16,
+
     fontWeight: "bold",
     fontFamily: "Prompt_400Regular",
 
@@ -305,6 +334,7 @@ const styles = StyleSheet.create({
 
 
   input: {
+
     margin: 10,
     height: 50,
     borderRadius: 10,
@@ -314,7 +344,7 @@ const styles = StyleSheet.create({
     padding: 3,
     justifyContent: "flex-end",
     backgroundColor: "#F0F0F0",
-    color: '#bebebe',
+    color: 'black',
     fontFamily: "Prompt_400Regular"
   },
   inputTime: {

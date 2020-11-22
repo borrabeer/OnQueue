@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     padding: 3,
     justifyContent: "flex-end",
     backgroundColor: "#F0F0F0",
-    color: '#bebebe',
+    color: 'black',
     fontFamily: "Prompt_400Regular"
   },
   inputTime: {

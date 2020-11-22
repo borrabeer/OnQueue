@@ -11,13 +11,13 @@ const QueueGridTile = (props) => {
         style={{ ...styles.container, ...{ backgroundColor: "#F0F0F0", } }}
       >
         <View style={{
+          width: "100%",
           flex: 1,
           flexDirection: "row",
           justifyContent: "space-between",
         }}>
-
           <Text style={{ fontFamily: "Prompt_400Regular", }}>{props.title}</Text>
-          <Text style={{ color: '#bebebe', fontFamily: "Prompt_400Regular", }}>{props.detail}</Text>
+          <Text style={{ color: '#bebebe', fontFamily: "Prompt_400Regular",color:"black" }}>{props.detail}</Text>
 
         </View>
 
@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
   },
 
   container: {
+    width:"100%",
     elevation: 3,
     flex: 1,
     shadowRadius: 30,

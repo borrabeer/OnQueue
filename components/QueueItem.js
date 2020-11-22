@@ -14,15 +14,14 @@ const QueueItem = (props) => {
     <View style={styles.container} >
       <Card>
         <View style={styles.row}>
-
-          <Text style={styles.text}>
+          <Text style={styles.textTime}>
             {props.data.time}
         </Text>
-          <Text style={styles.text2}>
+          <Text style={styles.textName}>
             {props.data.service.shop.name}
         </Text>
           <TouchableOpacity style={styles.bt2} onPress={props.onSelect}>
-            <Text style={styles.text3}>ดูประวัติ</Text>
+            <Text style={styles.textBT}>ดูประวัติ</Text>
           </TouchableOpacity>
         </View>
       </Card>
@@ -73,22 +72,23 @@ const styles = StyleSheet.create({
     // position: "absolute",
     // left: 10,
   },
-  text: {
-    //   flex:1,
+  textTime: {
+    flex:1,
     fontFamily: "Prompt_400Regular",
     fontSize: 16,
-    //   top: 10,
-    right: 200,
+    
+    left: 0,
     position: "absolute",
   },
-  text2: {
+  textName: {
+    flex:1,
     fontFamily: "Prompt_400Regular",
     fontSize: 16,
-    top: 10,
-    left: 90,
+    top: 20,
+    left: 0,
     position: "absolute"
   },
-  text3: {
+  textBT: {
     color: "white",
     top: 10,
     fontFamily: "Prompt_400Regular",

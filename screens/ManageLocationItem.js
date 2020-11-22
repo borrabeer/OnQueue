@@ -60,21 +60,22 @@ const ManageLocationItem = (props) => {
         backgroundColor: "#ffffff"
 
       }}>
+        
         <Text style={{ ...styles.fontInput }}>   ชื่อร้าน</Text>
         <Text
           style={{ ...styles.input }}
-        >{editShop.name}</Text>
+        > {editShop.name}</Text>
         <Text style={{ ...styles.fontInput }}>   สาขา</Text>
         <Text
           style={{ ...styles.input }}
-        >{editShop.branch}</Text>
+        > {editShop.branch}</Text>
         <View style={{
 
           marginRight: 15,
           flexDirection: "row",
           justifyContent: "space-between",
         }}>
-          <Text style={{ ...styles.fontInput, margin: 18 }}>   เปิด/ปิดร้าน</Text>
+          <Text style={{ ...styles.fontInput, marginTop: 10 }}>   เปิด/ปิดร้าน</Text>
           <Switch style={{ margin: 10 }}
             trackColor={{ false: "#ffffff", true: "#60c459" }}
             thumbColor={editShop.status ? "#ffffff" : "#ffffff"}
@@ -83,6 +84,7 @@ const ManageLocationItem = (props) => {
             disabled
           />
         </View>
+
 
 
         <TouchableOpacity style={{ ...styles.button, backgroundColor: "#e6c059", }} onPress={() => {
@@ -131,6 +133,7 @@ const styles = StyleSheet.create({
 
   },
   fontButton: {
+
     fontWeight: "bold",
     fontFamily: "Prompt_400Regular",
     textAlign: "center",
@@ -138,6 +141,8 @@ const styles = StyleSheet.create({
 
   },
   fontInput: {
+    marginTop: 5,
+    fontSize: 16,
     fontWeight: "bold",
     fontFamily: "Prompt_400Regular",
 
@@ -166,7 +171,7 @@ const styles = StyleSheet.create({
 
   input: {
     margin: 10,
-    height: 50,
+    height: 40,
     borderRadius: 10,
     shadowOpacity: 0.26,
     shadowOffset: { width: 0, height: 2 },
@@ -174,8 +179,10 @@ const styles = StyleSheet.create({
     padding: 3,
     justifyContent: "flex-end",
     backgroundColor: "#F0F0F0",
-    color: '#bebebe',
-    fontFamily: "Prompt_400Regular"
+    color: 'black',
+    fontFamily: "Prompt_400Regular",
+    fontSize: 16,
+    textAlign: "auto",
   },
   inputTime: {
     margin: 10,

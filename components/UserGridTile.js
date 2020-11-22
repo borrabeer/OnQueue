@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
         marginTop: 30,
     },
     title: {
-        fontSize: 18,
+        fontSize: 16,
         textAlign: "center",
         fontFamily: "Prompt_400Regular"
     },

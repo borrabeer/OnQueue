@@ -97,7 +97,7 @@ const QueueScreen = (props) => {
             style={{ ...styles.logo }} />
         </View>
         <View style={{ ...styles.container1 }}>
-          <Text style={[styles.fontBold, { fontSize: 50, color: "#ffffff" }]}>ยกเลิก</Text>
+          <Text style={[styles.fontBold, { fontSize: 35, color: "#ffffff" }]}>ยกเลิก</Text>
         </View>
       </View>
     </View>
@@ -119,8 +119,8 @@ const styles = StyleSheet.create({
   logo: {
 
     alignItems: "center",
-    width: 150,
-    height: 150,
+    width: 130,
+    height: 130,
   },
   viewCenter: {
     justifyContent: "center",
@@ -144,8 +144,8 @@ const styles = StyleSheet.create({
     elevation: 3,
     padding: 3,
     justifyContent: "flex-end",
-    backgroundColor: "#808080",
-    height: 80,
+    backgroundColor: "#c35c5c",
+    height: 60,
   },
 });
 

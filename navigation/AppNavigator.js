@@ -19,6 +19,8 @@ import LocationScreen from "../screens/LocationScreen";
 import LocationScreenEdit from "../screens/LocationScreenEdit";
 import ServiceDetailScreen from "../screens/ServiceDetailScreen";
 import ServiceDetailScreenEdit from "../screens/ServiceDetailScreenEdit";
+import { Image } from "react-native";
+import ic_qrcode from "../assets/ic_qrcode.png"
 
 const ServicesNavigator = createStackNavigator(
   {
@@ -94,9 +96,10 @@ const MainNavigator = createBottomTabNavigator(
     ScanQrCode: {
       screen: ScanQrCodeNavigator,
       navigationOptions: {
-        tabBarLabel: "สแกนคิว",
-        tabBarIcon: ({ tintColor }) => {
-          return (<MaterialCommunityIcons name="qrcode-scan" size={24} color={tintColor} />)
+        tabBarLabel: " ",
+        tabBarIcon: () => {
+          return (<Image source={ic_qrcode} size={15} style={{ transform: [{ scale: 0.32 }] }} />)
+
         }
       }
     },

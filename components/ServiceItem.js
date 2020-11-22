@@ -12,33 +12,37 @@ import { Card, Button } from 'react-native-elements'
 const ServiceItem = (props) => {
   return (
     <View style={styles.container} >
-
-      <Card>
+      <TouchableOpacity onPress={props.onEdit}>
+        <Card containerStyle={{width: 300}}>
         <View style={styles.row}>
+        <View style={{ flexDirection: "row" }}>
           <Image source={{ uri: "https://www.clipartsfree.net/vector/large/49491-small-green-dot-clipart.png" }} style={styles.iconimg} />
           <View style={styles.column}>
-            <Text style={{ fontSize: 20, fontFamily: "Prompt_400Regular", }}>
+            <Text style={{ fontSize: 20, fontFamily: "Prompt_400Regular", left: 20, }}>
               {props.data.name}
             </Text>
+            
           </View>
-          <TouchableOpacity style={styles.bt} onPress={props.onEdit}>
-            <Text style={{ fontSize: 16, fontFamily: "Prompt_400Regular", }}>แก้ไข</Text>
-          </TouchableOpacity>
+          
+          
         </View>
-      </Card>
+        </View>
+        </Card>
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  
   row: {
     flexDirection: "row",
     marginLeft: 20,
-    justifyContent: 'space-evenly'
+    justifyContent: "flex-start",
+    
   },
   column: {
     right: 20,
-    // left: 40,
     flexDirection: "column",
     justifyContent: "flex-start",
   },
@@ -48,11 +52,13 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   container: {
-    margin: 10,
+    margin: 5,
+    borderRadius: 10,
+    shadowColor: "black",
   },
   iconimg: {
-    right: 30,
-    top: 15,
+    right: 20,
+    top: 5,
     width: 20,
     height: 20,
     // position: "absolute",
@@ -68,5 +74,4 @@ const styles = StyleSheet.create({
     fontFamily: "Prompt_400Regular"
   }
 });
-
 export default ServiceItem;
