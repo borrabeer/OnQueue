@@ -34,15 +34,16 @@ const ServiceDetailScreen = (props) => {
     if (serviceName === null || serviceName === "" || serviceName === " ") {
       Alert.alert("Information", "กรุณาใส่ชื่อบริการ")
     }
-    else if (waitingTime === null || waitingTime === "" || waitingTime === " " || typeof waitingTime != "number") {
-      Alert.alert("Information", "กรุณาระบุเวลารอคิวโดยประมาณ")
+    else if (waitingTime === null || waitingTime === "" || waitingTime === " ") {
+      console.log(waitingTime);
+      Alert.alert("Information", "กรุณาระบุเวลารอคิวโดยประมาณ");
     }
     else {
       setLoadingHandler(true);
       dispatch(createService(userToken, {
         shop_id: shop_id,
         service_name: serviceName,
-        waiting_time: waitingTime,
+        waiting_time: Number.parseInt(waitingTime),
         status: isEnabled,
       }))
     }

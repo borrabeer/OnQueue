@@ -13,18 +13,26 @@ import {
 import QueueItem from "../components/QueueItem";
 import { useSelector, useDispatch } from "react-redux";
 import NavigationService from "../NavigationService";
+import { getQueue, setLoading } from "../store/actions/servicesAction";
 
 const QueueHistory = (props) => {
   const isLoading = useSelector(state => state.services.isLoading);
   const currentQueue = useSelector(state => state.services.queuesHistory);
+  const userToken = useSelector(state => state.services.userToken);
+  const dispatch = useDispatch();
+  const getQueueHandler = (queue_id, token) => {
+    dispatch(getQueue(queue_id, token));
+  }
+  const setLoadingHandler = (bool) => {
+    dispatch(setLoading(bool));
+  }
   const renderQueueItem = (itemData) => {
     return (
       <QueueItem
         data={itemData.item}
         onSelect={() => {
-          NavigationService.navigate("queueScreen", {
-            queue_id: itemData.item.id
-          });
+          setLoadingHandler(true);
+          getQueueHandler(itemData.item.id, userToken);
         }}
       />
     );

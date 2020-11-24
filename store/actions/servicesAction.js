@@ -261,6 +261,7 @@ export const getQueue = (queue_id, token) => {
                     type: Action.SET_QUEUE,
                     payload: data.data
                 })
+                NavigationService.navigate("queueScreen")
             })
             .catch(() => {
                 dispatch({

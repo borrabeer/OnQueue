@@ -35,6 +35,7 @@ const ServiceDetailScreenEdit = (props) => {
       Alert.alert("Information", "กรุณาใส่ชื่อบริการ")
     }
     else if (waitingTime === null || waitingTime === "" || waitingTime === " ") {
+      console.log(waitingTime);
       Alert.alert("Information", "กรุณาระบุเวลารอคิวโดยประมาณ")
     }
     else {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   Text,
@@ -12,13 +12,31 @@ import {
 } from "react-native";
 import QueueGridTile from "../components/QueueGridTile";
 import { useSelector, useDispatch } from "react-redux";
-import { getQueue, setLoading } from "../store/actions/servicesAction";
+import { getQueue, setLoading, updateQueueStatus } from "../store/actions/servicesAction";
 import NavigationService from "../NavigationService";
+import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
+import * as Permissions from 'expo-permissions';
+import { exp } from "react-native-reanimated";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 const QueueScreen = (props) => {
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
   const isLoading = useSelector(state => state.services.isLoading);
   const currentQueue = useSelector(state => state.services.queue);
   const userToken = useSelector(state => state.services.userToken);
+  const trigger = (((currentQueue.waiting_queue * currentQueue.service.estimated) - 5) * 60) < 0 ? 1 : (((currentQueue.waiting_queue * currentQueue.service.estimated) - 5) * 60);
+  // console.log(trigger);
   const queue_id = props.navigation.getParam("queue_id");
   const dispatch = useDispatch();
   const getQueueHandler = (queue_id, token) => {
@@ -27,10 +45,38 @@ const QueueScreen = (props) => {
   const setLoadingHandler = (bool) => {
     dispatch(setLoading(bool));
   }
+  const updateQueueStatusHandler = (token, id, status) => {
+    dispatch(updateQueueStatus(token, id, status))
+  }
+  // useEffect(() => {
+  //   setLoadingHandler(true);
+  //   getQueueHandler(queue_id, userToken);
+  // }, [])
   useEffect(() => {
-    setLoadingHandler(true);
-    getQueueHandler(queue_id, userToken);
-  }, [])
+    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+    });
+
+    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
+
+    if (currentQueue.status === "รอเรียกคิว") {
+      setNotiSchedule();
+    }
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener);
+      Notifications.removeNotificationSubscription(responseListener);
+    };
+  }, []);
+  const setNotiSchedule = async () => {
+    await schedulePushNotification(trigger);
+  }
   let queueDetail = []
   if (currentQueue != [] && currentQueue != null) {
     queueDetail = [
@@ -93,12 +139,26 @@ const QueueScreen = (props) => {
       }}>
         <FlatList data={queueDetail} renderItem={renderGridItem} />
         <View style={{ alignItems: "center" }}>
-          <Image source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Circle-icons-hourglass.svg/1200px-Circle-icons-hourglass.svg.png' }}
-            style={{ ...styles.logo }} />
+          {currentQueue.status === "รอเรียกคิว" ?
+            <Image source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Circle-icons-hourglass.svg/1200px-Circle-icons-hourglass.svg.png' }}
+              style={{ ...styles.logo }} /> :
+            <Image source={{ uri: 'https://www.kindpng.com/picc/m/80-807690_check-mark-well-icon-internet-circle-good-correct.png' }}
+              style={{ ...styles.logo }} />
+          }
         </View>
-        <View style={{ ...styles.container1 }}>
-          <Text style={[styles.fontBold, { fontSize: 35, color: "#ffffff" }]}>ยกเลิก</Text>
-        </View>
+        {currentQueue.status === "รอเรียกคิว" ?
+          <TouchableOpacity style={{ ...styles.container1 }} onPress={() => {
+            setLoadingHandler(true);
+            updateQueueStatusHandler(userToken, currentQueue.id, "C");
+            setLoadingHandler(true);
+            getQueueHandler(currentQueue.id, userToken);
+          }}>
+            <Text style={[styles.fontBold, { fontSize: 35, color: "#ffffff" }]}>ยกเลิก</Text>
+          </TouchableOpacity> :
+          <TouchableOpacity style={{ ...styles.container1, backgroundColor: "#A1A1A1" }}>
+            <Text style={[styles.fontBold, { fontSize: 35, color: "#ffffff" }]}>ยกเลิก</Text>
+          </TouchableOpacity>
+        }
       </View>
     </View>
   );
@@ -148,5 +208,39 @@ const styles = StyleSheet.create({
     height: 60,
   },
 });
+
+async function schedulePushNotification(time) {
+  console.log(time);
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: "OnQueue",
+      body: 'ใกล้ถึงลำดับคิวของคุณแล้ว รีบกลับไปที่ร้านเร็ว!',
+      data: { data: 'goes here' },
+    },
+    trigger: { seconds: time }
+  });
+}
+
+async function registerForPushNotificationsAsync() {
+  let token;
+  if (Constants.isDevice) {
+    const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log(token);
+  } else {
+    alert('Must use physical device for Push Notifications');
+  }
+
+  return token;
+}
 
 export default QueueScreen;
