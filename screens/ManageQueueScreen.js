@@ -60,7 +60,7 @@ const ManageQueueScreen = (props) => {
         underlayColor='#ccc'
       // onPress = { () => alert('Yaay!') }
       >
-        <Text style={styles.cctext}> {SelectService ? manageQueues[0].id : ""} คิวปัจจุบัน </Text>
+        <Text style={styles.cctext}> {SelectService ? manageQueues.length > 0 ? manageQueues[0].id : "" : ""} คิวปัจจุบัน </Text>
       </TouchableHighlight>
       <DropDownPicker items={servicesData} defaultValue={SelectService} containerStyle={{ height: 40 }} onChangeItem={item => {
         setLoadingHandler(true);
@@ -72,8 +72,22 @@ const ManageQueueScreen = (props) => {
         </Text>
       <TouchableOpacity style={styles.bt1}
         onPress={() => {
-          setLoadingHandler(true);
-          updateQueueStatusHandler(userToken, manageQueues[0].id, "O");
+          if (manageQueues.length > 0) {
+            setLoadingHandler(true);
+            updateQueueStatusHandler(userToken, manageQueues[0].id, "O");
+          } else {
+            Alert.alert(
+              "Oops!",
+              "ขณะนี้ไม่มีคิวที่จองอยู่ของบริการดังกล่าว!",
+              [
+                {
+                  text: "ยืนยัน",
+                  style: "cancel"
+                },
+              ],
+              { cancelable: false }
+            );
+          }
         }}>
         <Text style={styles.text1} >
           บริการเสร็จสิ้น เรียกคิวถัดไป
@@ -91,8 +105,22 @@ const ManageQueueScreen = (props) => {
               },
               {
                 text: "ยืนยัน", onPress: () => {
-                  setLoadingHandler(true);
-                  updateQueueStatusHandler(userToken, manageQueues[0].id, "C");
+                  if (manageQueues.length > 0) {
+                    setLoadingHandler(true);
+                    updateQueueStatusHandler(userToken, manageQueues[0].id, "C");
+                  } else {
+                    Alert.alert(
+                      "Oops!",
+                      "ขณะนี้ไม่มีคิวที่จองอยู่ของบริการดังกล่าว!",
+                      [
+                        {
+                          text: "ยืนยัน",
+                          style: "cancel"
+                        },
+                      ],
+                      { cancelable: false }
+                    );
+                  }
                 },
                 style: "destructive"
               }
