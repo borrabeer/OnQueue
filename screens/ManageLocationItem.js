@@ -15,8 +15,9 @@ import {
   ScrollView,
   ActivityIndicator,
 } from "react-native";
+import { NavigationActions } from "react-navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoading, getEditShop, getManageServices, getManageShopItem } from "../store/actions/servicesAction";
+import { setLoading, getEditShop, getManageServices, getManageShopItem, getManageUser } from "../store/actions/servicesAction";
 
 const ManageLocationItem = (props) => {
   const isLoading = useSelector(state => state.services.isLoading);
@@ -28,6 +29,9 @@ const ManageLocationItem = (props) => {
   }
   const getEditShopHandler = (token, id) => {
     dispatch(getEditShop(token, id));
+  }
+  const getManageUserHandler = (token, id) => {
+    dispatch(getManageUser(token, id));
   }
   const getManageServicesHandler = (token, id) => {
     dispatch(getManageServices(token, id));
@@ -93,7 +97,10 @@ const ManageLocationItem = (props) => {
         }}>
           <Text style={[styles.fontButton, { fontSize: 25, color: "ffffff" }]}>แก้ไข</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{ ...styles.button, backgroundColor: "#c25e5e", }}>
+        <TouchableOpacity style={{ ...styles.button, backgroundColor: "#c25e5e", }} onPress={() => {
+          setLoadingHandler(true);
+          getManageUserHandler(userToken, editShop.id);
+        }}>
           <Text style={[styles.fontButton, { fontSize: 25, color: "#ffffff" }]}>รายชื่อผู้จัดการร้าน</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{ ...styles.button, backgroundColor: "#64c460", }} onPress={() => {

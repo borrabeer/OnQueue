@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -8,28 +8,27 @@ import {
   Image,
 } from "react-native";
 import { Card, ListItem, Button, Icon, SearchBar } from 'react-native-elements'
-import DropDownPicker from 'react-native-dropdown-picker';
 
 const ManagerList = (props) => {
   return (
     <View style={styles.container} >
       <Card>
-          <View style={styles.row}>
-          <Image source={{uri:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/LINE_logo.svg/1024px-LINE_logo.svg.png'}} style={styles.logo} />
-        {/* <Text style={styles.text}>
+        <View style={styles.row}>
+          <Image source={{ uri: props.data.user.image }} style={styles.logo} />
+          {/* <Text style={styles.text}>
             nithan
         </Text> */}
-        <Text style={styles.text2}>
-            Nithan
-        </Text>
-        <Text style={styles.text4}>
-            game-pp@hotmail.com
-        </Text>    
-        <TouchableOpacity style={styles.bt2} onPress={() => {
-                props.onSelect();
-            }}>
+          <Text style={styles.text2}>
+            {props.data.user.user.first_name}
+          </Text>
+          <Text style={styles.text4}>
+            {props.data.user.user.email}
+          </Text>
+          <TouchableOpacity style={styles.bt2} onPress={() => {
+            props.onDelete();
+          }}>
             <Text style={styles.text3}>ลบ</Text>
-        </TouchableOpacity>
+          </TouchableOpacity>
         </View>
       </Card>
     </View>
@@ -38,8 +37,8 @@ const ManagerList = (props) => {
 
 const styles = StyleSheet.create({
   row: {
-    flexDirection: "row" ,
-    marginLeft: 20, 
+    flexDirection: "row",
+    marginLeft: 20,
     justifyContent: 'space-evenly'
   },
   bgImage: {
@@ -47,7 +46,7 @@ const styles = StyleSheet.create({
     height: "100%",
     // justifyContent: "flex-end",
   },
-  logo:{
+  logo: {
     width: 40,
     height: 40,
     right: 250,
@@ -55,7 +54,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   container: {
-      margin: 10,
+    margin: 10,
   },
   iconimg: {
     right: 30,
@@ -87,21 +86,21 @@ const styles = StyleSheet.create({
     // left: 10,
   },
   text: {
-      fontFamily: "prompt",
-      fontSize: 20,
-      top: 10,
-      right: 200,
-      position: "absolute",
+    fontFamily: "Prompt_400Regular_400Regular",
+    fontSize: 20,
+    top: 10,
+    right: 200,
+    position: "absolute",
   },
   text2: {
-    fontFamily: "Prompt",
+    fontFamily: "Prompt_400Regular",
     fontSize: 16,
     top: 5,
     left: 50,
     position: "absolute"
   },
   text4: {
-    fontFamily: "Prompt",
+    fontFamily: "Prompt_400Regular",
     fontSize: 14,
     top: 20,
     left: 50,
@@ -110,11 +109,11 @@ const styles = StyleSheet.create({
   text3: {
     color: "white",
     top: 10,
-    fontFamily: "Prompt",
+    fontFamily: "Prompt_400Regular",
     fontSize: 16,
     position: "relative",
     left: 30,
-}
+  }
 });
 
 export default ManagerList;

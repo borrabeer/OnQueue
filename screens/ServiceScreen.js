@@ -32,13 +32,10 @@ const ServiceScreen = (props) => {
     const element = {
       label: availableServices[index].name,
       value: availableServices[index].id,
-      icon: () => {
-        <AntDesign name="caretright" size={24} color="black" />
-      },
     };
     servicesData.push(element);
   }
-  const [SelectService, setSelectService] = useState(servicesData[0] != null ? servicesData[0].value : null);
+  const [SelectService, setSelectService] = useState(null);
   const dispatch = useDispatch();
   const getServicesHandler = (shop_id) => {
     dispatch(getServices(shop_id))

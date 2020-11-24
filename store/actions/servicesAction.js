@@ -62,6 +62,28 @@ export const getManageShops = (token) => {
     }
 }
 
+export const getManageShopsQueue = (token) => {
+    return (dispatch) => {
+        Axios.get(`https://${BaseURL}/shops/manage/`, {
+            headers: {
+                "Authorization": "Bearer " + token,
+            }
+        })
+            .then(data => {
+                dispatch({
+                    type: Action.SET_MANAGE_SHOP,
+                    payload: data.data
+                })
+                NavigationService.navigate("manageLocationQueue");
+            })
+            .catch(() => {
+                dispatch({
+                    type: Action.SHOPS_ERROR
+                })
+            })
+    }
+}
+
 export const getManageServices = (token, shop_id) => {
     return (dispatch) => {
         Axios.get(`https://${BaseURL}/services/manage/${shop_id}/`, {
@@ -75,6 +97,32 @@ export const getManageServices = (token, shop_id) => {
                     payload: data.data
                 })
                 NavigationService.navigate("manageService", {
+                    shop_id: shop_id
+                });
+            })
+            .catch((e) => {
+                console.log(e.response);
+                dispatch({
+                    type: Action.SHOPS_ERROR,
+                    payload: e
+                })
+            })
+    }
+}
+
+export const getManageServicesQueue = (token, shop_id) => {
+    return (dispatch) => {
+        Axios.get(`https://${BaseURL}/services/manage/${shop_id}/`, {
+            headers: {
+                "Authorization": "Bearer " + token,
+            }
+        })
+            .then(data => {
+                dispatch({
+                    type: Action.SET_MANAGE_SERVICE,
+                    payload: data.data
+                })
+                NavigationService.navigate("manageQueue", {
                     shop_id: shop_id
                 });
             })
@@ -642,16 +690,76 @@ export const deleteService = (token, service_id, shop_id) => {
 
 export const getManageUser = (token, shop_id) => {
     return (dispatch) => {
-        Axios.get(`https://${BaseURL}/users/manager/${shop_id}/`, {
+        Axios.get(`https://${BaseURL}/shops/staff/${shop_id}/`, {
             headers: {
                 "Authorization": "Bearer " + token,
             }
         })
             .then(data => {
                 console.log(data.data);
+                dispatch({
+                    type: Action.SET_MANAGER_USER,
+                    payload: data.data
+                })
+                NavigationService.navigate("managerList", {
+                    shop_id: shop_id
+                })
             })
             .catch((e) => {
                 console.log(e.response);
+                dispatch({
+                    type: Action.USER_ERROR,
+                    payload: e
+                })
+            })
+    }
+}
+
+export const createShopManager = (token, shop_id, email) => {
+    return (dispatch) => {
+        Axios.post(`https://${BaseURL}/user/staff/${shop_id}/`, {
+            email: email
+        }, {
+            headers: {
+                "Authorization": "Bearer " + token,
+            }
+        })
+            .then(data => {
+                dispatch(getManageUser(token, shop_id));
+                NavigationService.navigate("managerList", {
+                    shop_id: shop_id
+                })
+            })
+            .catch((e) => {
+                if (e.response.status === 400) {
+                    Alert.alert("Oops !", "ไม่พบบัญชีผู้ใช้งานดังกล่าว!");
+                }
+                dispatch({
+                    type: Action.USER_ERROR,
+                    payload: e
+                })
+            })
+    }
+}
+
+export const deleteShopManager = (token, shop_id, email) => {
+    return (dispatch) => {
+        Axios.delete(`https://${BaseURL}/user/staff/${shop_id}/`, {
+            headers: {
+                "Authorization": "Bearer " + token,
+                "email": email,
+            }
+        })
+            .then(data => {
+                dispatch(getManageUser(token, shop_id));
+                NavigationService.navigate("managerList", {
+                    shop_id: shop_id
+                })
+            })
+            .catch((e) => {
+                if (e.response.status === 400) {
+                    Alert.alert("Oops !", "ไม่พบบัญชีผู้ใช้งานดังกล่าว!");
+                }
                 dispatch({
                     type: Action.USER_ERROR,
                     payload: e

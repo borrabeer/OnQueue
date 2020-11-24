@@ -16,9 +16,9 @@ const ShopItem = (props) => {
     //  console.log(openshop)
     // console.log( Moment( props.open_time, "h:mm:ss a").isBefore(props.close_time , "h:mm:ss a"))
 
-    console.log(now2.getTime() > date2.getTime())
-    console.log(openshop)
-    console.log(closeshop)
+    // console.log(now2.getTime() > date2.getTime())
+    // console.log(openshop)
+    // console.log(closeshop)
     return (
         <View style={styles.screen} >
             <View style={styles.shopItem}>

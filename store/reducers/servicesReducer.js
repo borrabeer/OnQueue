@@ -14,6 +14,7 @@ const initialState = {
     userData: null,
     userToken: null,
     isLogin: false,
+    managers: [],
 }
 
 const serviceReducer = (state = initialState, action) => {
@@ -40,6 +41,12 @@ const serviceReducer = (state = initialState, action) => {
             return {
                 ...state,
                 manageServices: action.payload,
+                isLoading: false,
+            }
+        case Action.SET_MANAGER_USER:
+            return {
+                ...state,
+                managers: action.payload,
                 isLoading: false,
             }
         case Action.SET_EDIT_SHOP:

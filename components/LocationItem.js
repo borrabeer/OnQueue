@@ -17,7 +17,6 @@ const LocationItem = (props) => {
   var closeshop = Moment(props.data.close_time, "h:mm:ss").format('LLL');
   var date1 = new Date(openshop);
   var date2 = new Date(closeshop);
-  console.log(date1)
   return (
     <View style={styles.container} >
       <TouchableOpacity onPress={props.onSelect}>

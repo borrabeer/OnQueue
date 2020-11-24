@@ -16,7 +16,7 @@ import UserGridTile from "../components/UserGridTile";
 import { useSelector, useDispatch } from "react-redux";
 import { USERFUNCTION, STAFFFUNCTION } from "../data/dummy-data";
 import * as Action from "../store/types";
-import { userLogout, getManageShops, setLoading, getQueueHistory } from "../store/actions/servicesAction";
+import { userLogout, getManageShops, setLoading, getQueueHistory, getManageShopsQueue } from "../store/actions/servicesAction";
 import NavigationService from "../NavigationService";
 
 const UserManagement = (props) => {
@@ -39,6 +39,9 @@ const UserManagement = (props) => {
   const getManageShopsHandler = (token) => {
     dispatch(getManageShops(token));
   }
+  const getManageShopsQueueHandler = (token) => {
+    dispatch(getManageShopsQueue(token));
+  }
   const getQueueHistoryHandler = (token) => {
     dispatch(getQueueHistory(token));
   }
@@ -54,6 +57,10 @@ const UserManagement = (props) => {
       case Action.SHOP_MANAGE:
         setLoadingHandler(true);
         getManageShopsHandler(userToken);
+        break;
+      case Action.QUEUE_MANAGE:
+        setLoadingHandler(true);
+        getManageShopsQueueHandler(userToken);
         break;
       default:
         console.log(id);
@@ -89,7 +96,7 @@ const UserManagement = (props) => {
         justifyContent: "flex-end",
         backgroundColor: "#ffffff"
       }}>
-        <View style={{ flex:1.5}} ></View>
+        <View style={{ flex: 1.5 }} ></View>
         <FlatList renderItem={renderUserFunction} data={isStaff ? STAFFFUNCTION : USERFUNCTION} numColumns={2} />
         <TouchableHighlight
           style={styles.circle}

@@ -22,6 +22,8 @@ import ServiceDetailScreenEdit from "../screens/ServiceDetailScreenEdit";
 import { Image } from "react-native";
 import ic_qrcode from "../assets/ic_qrcode.png"
 import ManagerListScreen from "../screens/ManagerListScreen";
+import ManageQueueScreen from "../screens/ManageQueueScreen";
+import ManageLocationQueue from "../screens/ManageLocationQueue";
 
 const ServicesNavigator = createStackNavigator(
   {
@@ -74,6 +76,8 @@ const UserServiceNavigator = createStackNavigator(
     serviceEdit: ServiceDetailScreenEdit,
     locationItem: ManageLocationItem,
     managerList: ManagerListScreen,
+    manageQueue: ManageQueueScreen,
+    manageLocationQueue: ManageLocationQueue,
   },
   {
     defaultNavigationOptions: {

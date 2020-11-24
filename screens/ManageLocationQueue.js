@@ -12,21 +12,26 @@ import {
 } from "react-native";
 import { SearchBar } from 'react-native-elements'
 import { useDispatch, useSelector } from "react-redux";
-import ServiceItem from "../components/ServiceItem";
+import LocationItem from "../components/LocationItem";
 import NavigationService from "../NavigationService";
-import { setLoading, getEditService } from "../store/actions/servicesAction";
+import { setLoading, getEditShop, getManageServices, getManageServicesQueue } from "../store/actions/servicesAction";
 
-const ManageService = (props) => {
+const ManageLocationQueue = (props) => {
   const isLoading = useSelector(state => state.services.isLoading);
   const userToken = useSelector(state => state.services.userToken);
-  const availableServices = useSelector(state => state.services.manageServices);
-  const shop_id = props.navigation.getParam("shop_id");
+  const availableShops = useSelector(state => state.services.manageShops);
   const dispatch = useDispatch();
   const setLoadingHandler = (bool) => {
     dispatch(setLoading(bool))
   }
-  const getEditServiceHandler = (token, id) => {
-    dispatch(getEditService(token, id));
+  const getEditShopHandler = (token, id) => {
+    dispatch(getEditShop(token, id));
+  }
+  const getManageServicesHandler = (token, id) => {
+    dispatch(getManageServices(token, id));
+  }
+  const getManageServicesQueueHandler = (token, id) => {
+    dispatch(getManageServicesQueue(token, id));
   }
   if (isLoading) {
     return (
@@ -35,48 +40,47 @@ const ManageService = (props) => {
       </View>
     )
   }
-  const renderServiceItem = (itemData) => {
-    console.log(itemData.item);
+  const renderLocationItem = (itemData) => {
     return (
 
-      <ServiceItem
-        data={itemData.item}
+      <LocationItem
+        data={itemData.item.shop}
         onEdit={() => {
           setLoadingHandler(true);
-          getEditServiceHandler(userToken, itemData.item.id);
+          getEditShopHandler(userToken, itemData.item.shop.id);
+        }}
+        onManage={() => {
+          setLoadingHandler(true);
+          getManageServicesHandler(userToken, itemData.item.shop.id);
+        }}
+        onSelect={() => {
+          setLoadingHandler(true);
+          getManageServicesQueueHandler(userToken, itemData.item.shop.id);
         }}
       />
     )
   }
   return (
 
+
     <View style={styles.screen}>
-      {/* <SearchBar style={{ height: 30 }}
+      <SearchBar style={{ height: 30, }}
         round
         lightTheme
         placeholder="Type Here..."
         containerStyle={{ width: "95%", backgroundColor: "#FFFFFF", borderRadius: 5 }}
-
       // onChangeText={this.updateSearch}
       // value={search}
       />
-       */}
       <ScrollView>
         <View style={styles.screen}>
-          <FlatList data={availableServices} renderItem={renderServiceItem} numColumns={1} />
+          <FlatList data={availableShops} renderItem={renderLocationItem} numColumns={1} />
 
-          <TouchableOpacity style={styles.bt} onPress={() => {
-            NavigationService.navigate("serviceDetail", {
-              shop_id: shop_id
-            })
-          }}>
-            <Text style={styles.text} >
-              เพิ่มบริการ
-            </Text>
-          </TouchableOpacity>
         </View>
       </ScrollView>
     </View>
+
+
   )
 }
 
@@ -99,9 +103,9 @@ const styles = StyleSheet.create({
     height: 60,
     justifyContent: "center",
     backgroundColor: "#2E64FE",
-    width: 320,
-    // position: "absolute",
-    // top: 600
+    
+    position: "relative",
+    
   },
   text: {
     color: "white",
@@ -112,4 +116,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default ManageService;
+export default ManageLocationQueue;
