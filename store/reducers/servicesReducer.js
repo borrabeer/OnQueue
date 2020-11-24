@@ -7,6 +7,7 @@ const initialState = {
     editShop: null,
     services: [],
     manageServices: [],
+    manageQueues: [],
     editService: null,
     queuesHistory: [],
     queue: [],
@@ -41,6 +42,12 @@ const serviceReducer = (state = initialState, action) => {
             return {
                 ...state,
                 manageServices: action.payload,
+                isLoading: false,
+            }
+        case Action.SET_MANAGE_QUEUE:
+            return {
+                ...state,
+                manageQueues: action.payload,
                 isLoading: false,
             }
         case Action.SET_MANAGER_USER:

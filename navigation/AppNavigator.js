@@ -24,6 +24,7 @@ import ic_qrcode from "../assets/ic_qrcode.png"
 import ManagerListScreen from "../screens/ManagerListScreen";
 import ManageQueueScreen from "../screens/ManageQueueScreen";
 import ManageLocationQueue from "../screens/ManageLocationQueue";
+import AllQueueScreen from "../screens/AllQueueScreen";
 
 const ServicesNavigator = createStackNavigator(
   {
@@ -78,6 +79,7 @@ const UserServiceNavigator = createStackNavigator(
     managerList: ManagerListScreen,
     manageQueue: ManageQueueScreen,
     manageLocationQueue: ManageLocationQueue,
+    allQueue: AllQueueScreen,
   },
   {
     defaultNavigationOptions: {

@@ -30,8 +30,8 @@ const ManageLocationQueue = (props) => {
   const getManageServicesHandler = (token, id) => {
     dispatch(getManageServices(token, id));
   }
-  const getManageServicesQueueHandler = (token, id) => {
-    dispatch(getManageServicesQueue(token, id));
+  const getManageServicesQueueHandler = (token, id, data) => {
+    dispatch(getManageServicesQueue(token, id, data));
   }
   if (isLoading) {
     return (
@@ -55,7 +55,7 @@ const ManageLocationQueue = (props) => {
         }}
         onSelect={() => {
           setLoadingHandler(true);
-          getManageServicesQueueHandler(userToken, itemData.item.shop.id);
+          getManageServicesQueueHandler(userToken, itemData.item.shop.id, itemData.item.shop);
         }}
       />
     )

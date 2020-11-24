@@ -110,7 +110,7 @@ export const getManageServices = (token, shop_id) => {
     }
 }
 
-export const getManageServicesQueue = (token, shop_id) => {
+export const getManageServicesQueue = (token, shop_id, shop) => {
     return (dispatch) => {
         Axios.get(`https://${BaseURL}/services/manage/${shop_id}/`, {
             headers: {
@@ -123,13 +123,37 @@ export const getManageServicesQueue = (token, shop_id) => {
                     payload: data.data
                 })
                 NavigationService.navigate("manageQueue", {
-                    shop_id: shop_id
+                    shop_id: shop_id,
+                    shop: shop
                 });
             })
             .catch((e) => {
                 console.log(e.response);
                 dispatch({
-                    type: Action.SHOPS_ERROR,
+                    type: Action.SERVICES_ERROR,
+                    payload: e
+                })
+            })
+    }
+}
+
+export const getAllServicesQueue = (token, service_id) => {
+    return (dispatch) => {
+        Axios.get(`https://${BaseURL}/services/manage/service/${service_id}/`, {
+            headers: {
+                "Authorization": "Bearer " + token,
+            }
+        })
+            .then(data => {
+                dispatch({
+                    type: Action.SET_MANAGE_QUEUE,
+                    payload: data.data
+                })
+            })
+            .catch((e) => {
+                console.log(e.response);
+                dispatch({
+                    type: Action.QUEUE_ERRORS,
                     payload: e
                 })
             })
@@ -762,6 +786,35 @@ export const deleteShopManager = (token, shop_id, email) => {
                 }
                 dispatch({
                     type: Action.USER_ERROR,
+                    payload: e
+                })
+            })
+    }
+}
+
+export const updateQueueStatus = (token, queue_id, status) => {
+    return (dispatch) => {
+        Axios.patch(`https://${BaseURL}/services/update/queue/${queue_id}/`, {
+            status: status,
+        }, {
+            headers: {
+                "Authorization": "Bearer " + token,
+            }
+        })
+            .then(data => {
+                Alert.alert("Update Success!", "อัพเดทสถานะคิวสำเร็จ!",
+                    [
+                        {
+                            text: "ตกลง", onPress: () => {
+                                dispatch(getAllServicesQueue(token, data.data.service.id));
+                            }
+                        }
+                    ],
+                    { cancelable: false })
+            })
+            .catch(e => {
+                dispatch({
+                    type: Action.QUEUE_ERRORS,
                     payload: e
                 })
             })

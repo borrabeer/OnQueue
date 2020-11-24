@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -8,36 +8,72 @@ import {
   Image,
   TouchableHighlight,
   Dimensions,
-  ScrollView
+  ScrollView,
+  ActivityIndicator,
+  Alert
 } from "react-native";
-import { Card, ListItem, Button, Icon, SearchBar } from 'react-native-elements'
 import DropDownPicker from 'react-native-dropdown-picker';
+import { NavigationActions } from "react-navigation";
+import { useDispatch, useSelector } from "react-redux";
+import NavigationService from "../NavigationService";
+import { setLoading, getAllServicesQueue, updateQueueStatus } from "../store/actions/servicesAction";
 
 const ManageQueueScreen = (props) => {
+  const isLoading = useSelector(state => state.services.isLoading);
+  const userToken = useSelector(state => state.services.userToken);
+  const availableServices = useSelector(state => state.services.manageServices);
+  const manageQueues = useSelector(state => state.services.manageQueues);
+  console.log(manageQueues);
+  const dispatch = useDispatch();
+  const setLoadingHandler = (bool) => {
+    dispatch(setLoading(bool))
+  }
+  const getAllServicesQueueHandler = (token, id) => {
+    dispatch(getAllServicesQueue(token, id))
+  }
+  const updateQueueStatusHandler = (token, id, status) => {
+    dispatch(updateQueueStatus(token, id, status))
+  }
+  const shop = props.navigation.getParam("shop");
+  const servicesData = [];
+  for (let index = 0; index < availableServices.length; index++) {
+    const element = {
+      label: availableServices[index].name,
+      value: availableServices[index].id,
+      shop: availableServices[index].shop,
+    };
+    servicesData.push(element);
+  }
+  const [SelectService, setSelectService] = useState(null);
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+      </View>
+    )
+  }
   return (
     <ScrollView style={styles.container} >
-      <Image source={{ uri: "https://dhdnzx78tqry5.cloudfront.net/uploads/thailand/deal/thumb/3559.jpg" }} style={styles.bgImage} />
+      <Image source={{ uri: shop.icon_url }} style={styles.bgImage} />
       <TouchableHighlight
         style={styles.circle}
         underlayColor='#ccc'
       // onPress = { () => alert('Yaay!') }
       >
-        <Text style={styles.cctext}> 15 คิวปัจจุบัน </Text>
+        <Text style={styles.cctext}> {SelectService ? manageQueues[0].id : ""} คิวปัจจุบัน </Text>
       </TouchableHighlight>
-      <DropDownPicker
-        items={[
-          { label: 'จองโต๊ะ', value: 'usa', icon: () => <Icon name="flag" size={18} color="#900" />, hidden: true },
-          { label: 'กลับบ้าน', value: 'uk', icon: () => <Icon name="flag" size={18} color="#900" /> },
-        ]}
-        style={{ marginTop: 20 }}
-        containerStyle={{ height: 80 }}
-      />
+      <DropDownPicker items={servicesData} defaultValue={SelectService} containerStyle={{ height: 40 }} onChangeItem={item => {
+        setLoadingHandler(true);
+        getAllServicesQueueHandler(userToken, item.value)
+        setSelectService(item.value)
+      }} />
       <Text style={styles.text}>
         เลือกประเภทบริการ
         </Text>
       <TouchableOpacity style={styles.bt1}
         onPress={() => {
-          props.onSelect3();
+          setLoadingHandler(true);
+          updateQueueStatusHandler(userToken, manageQueues[0].id, "O");
         }}>
         <Text style={styles.text1} >
           บริการเสร็จสิ้น เรียกคิวถัดไป
@@ -45,7 +81,24 @@ const ManageQueueScreen = (props) => {
       </TouchableOpacity>
       <TouchableOpacity style={styles.bt2}
         onPress={() => {
-          props.onSelect2();
+          Alert.alert(
+            "Warning!",
+            "ยืนยันที่จะยกเลิกคิวปัจจุบันหรือไม่",
+            [
+              {
+                text: "ยกเลิก",
+                style: "cancel"
+              },
+              {
+                text: "ยืนยัน", onPress: () => {
+                  setLoadingHandler(true);
+                  updateQueueStatusHandler(userToken, manageQueues[0].id, "C");
+                },
+                style: "destructive"
+              }
+            ],
+            { cancelable: false }
+          );
         }}>
         <Text style={styles.text2} >
           ข้ามคิวปัจจุบัน
@@ -53,7 +106,23 @@ const ManageQueueScreen = (props) => {
       </TouchableOpacity>
       <TouchableOpacity style={styles.bt3}
         onPress={() => {
-          props.onSelect();
+          if (SelectService != null) {
+            NavigationService.navigate("allQueue", {
+              service_id: SelectService
+            })
+          } else {
+            Alert.alert(
+              "Oops!",
+              "กรุณาเลือกบริการที่ต้องการ!",
+              [
+                {
+                  text: "ตกลง",
+                  style: "cancel"
+                }
+              ],
+              { cancelable: false }
+            );
+          }
         }}>
         <Text style={styles.text3} >
           ดูคิวทั้งหมด
