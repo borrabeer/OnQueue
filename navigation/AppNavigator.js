@@ -85,7 +85,11 @@ const UserServiceNavigator = createStackNavigator(
     defaultNavigationOptions: {
       headerStyle: { backgroundColor: "#3671D6" },
       headerTintColor: "white",
-      headerTitle: "OnQueue"
+      headerTitle: "OnQueue",
+      headerTitleStyle: {
+        fontFamily: "Prompt_400Regular",
+        fontSize: 31
+      }
     },
   }
 )

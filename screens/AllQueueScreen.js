@@ -112,9 +112,9 @@ const styles = StyleSheet.create({
   },
   bt1: {
     //   flex:2,
-    left: 70,
+    left: 85,
     width: 80,
-    height: 50,
+    height: 55,
     backgroundColor: "#4BCF14",
     borderRadius: 10,
     // justifyContent: "flex-end",
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     //   flex: 3,
     left: 40,
     width: 80,
-    height: 50,
+    height: 55,
     backgroundColor: "#BC3B19",
     borderRadius: 10,
     // justifyContent: "flex-end",
@@ -142,11 +142,11 @@ const styles = StyleSheet.create({
   },
   text2: {
     color: "white",
-    top: 10,
+    top: 12,
     fontFamily: "Prompt_400Regular",
-    fontSize: 22,
+    fontSize: 20,
     position: "relative",
-    left: 5,
+    left: 8,
   },
   text3: {
     color: "white",
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     fontFamily: "Prompt_400Regular",
     fontSize: 22,
     position: "relative",
-    left: 10,
+    left: 12,
   }
 });
 

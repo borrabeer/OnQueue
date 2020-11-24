@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   logo: {
     width: 40,
     height: 40,
-    right: 250,
+    right: 280,
     justifyContent: "flex-start",
     position: "absolute",
   },
