@@ -7,14 +7,15 @@ import {
   ImageBackground,
   Image,
   TouchableHighlight,
-  Dimensions
+  Dimensions,
+  ScrollView
 } from "react-native";
 import { Card, ListItem, Button, Icon, SearchBar } from 'react-native-elements'
 import DropDownPicker from 'react-native-dropdown-picker';
 
 const ManageQueueScreen = (props) => {
   return (
-    <View style={styles.container} >
+    <ScrollView style={styles.container} >
       <Image source={{ uri: "https://dhdnzx78tqry5.cloudfront.net/uploads/thailand/deal/thumb/3559.jpg" }} style={styles.bgImage} />
       <TouchableHighlight
         style={styles.circle}
@@ -29,6 +30,7 @@ const ManageQueueScreen = (props) => {
           { label: 'กลับบ้าน', value: 'uk', icon: () => <Icon name="flag" size={18} color="#900" /> },
         ]}
         style={{ marginTop: 20 }}
+        containerStyle={{ height: 80 }}
       />
       <Text style={styles.text}>
         เลือกประเภทบริการ
@@ -57,7 +59,7 @@ const ManageQueueScreen = (props) => {
           ดูคิวทั้งหมด
             </Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
