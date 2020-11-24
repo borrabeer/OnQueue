@@ -62,14 +62,14 @@ const ManageQueueScreen = (props) => {
       >
         <Text style={styles.cctext}> {SelectService ? manageQueues[0].id : ""} คิวปัจจุบัน </Text>
       </TouchableHighlight>
-      <DropDownPicker items={servicesData} defaultValue={SelectService} containerStyle={{ height: 40 }} onChangeItem={item => {
+      <Text style={styles.text}>
+        เลือกประเภทบริการ
+        </Text>
+      <DropDownPicker items={servicesData} defaultValue={SelectService} containerStyle={{ height: 40, width:350, left:23, }} onChangeItem={item => {
         setLoadingHandler(true);
         getAllServicesQueueHandler(userToken, item.value)
         setSelectService(item.value)
       }} />
-      <Text style={styles.text}>
-        เลือกประเภทบริการ
-        </Text>
       <TouchableOpacity style={styles.bt1}
         onPress={() => {
           setLoadingHandler(true);
@@ -140,8 +140,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
-    left: 100,
-    top: 25,
+    left: 110,
+    top: 20,
     position: "absolute",
     opacity: 1.0,
     shadowColor: "#000",
@@ -170,30 +170,30 @@ const styles = StyleSheet.create({
   },
   bt1: {
     marginTop: 20,
-    width: 300,
+    width: 320,
     top: 20,
     height: 60,
-    left: 30,
+    left: 35,
     justifyContent: "center",
     backgroundColor: "#4BCF14",
     borderRadius: 10,
   },
   bt2: {
-    width: 300,
+    width: 320,
     marginTop: 20,
     top: 20,
     height: 60,
-    left: 30,
+    left: 35,
     justifyContent: "center",
     backgroundColor: "#BC3B19",
     borderRadius: 10,
   },
   bt3: {
-    width: 300,
+    width: 320,
     top: 20,
     marginTop: 20,
     height: 60,
-    left: 30,
+    left: 35,
     justifyContent: "center",
     backgroundColor: "#FFC300",
     borderRadius: 10,
@@ -201,24 +201,24 @@ const styles = StyleSheet.create({
   text1: {
     color: "white",
     // justifyContent: "center",
-    left: 10,
-    fontSize: 24,
+    left: 40,
+    fontSize: 20,
     fontFamily: "Prompt_400Regular",
     position: "absolute"
   },
   text2: {
     color: "white",
     // justifyContent: "center",
-    left: 70,
+    left: 95,
     fontFamily: "Prompt_400Regular",
-    fontSize: 26,
+    fontSize: 22,
     position: "absolute"
   },
   text3: {
     color: "white",
     // justifyContent: "center",
-    left: 80,
-    fontSize: 26,
+    left: 95,
+    fontSize: 24,
     position: "absolute",
     fontFamily: "Prompt_400Regular",
   },
@@ -227,7 +227,9 @@ const styles = StyleSheet.create({
     // justifyContent: "center",
     // left: 85,
     fontSize: 26,
+    left: 23,
     fontFamily: "Prompt_400Regular",
+    margin: 10
     // position: "absolute"
   }
 });
