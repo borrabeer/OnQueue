@@ -271,6 +271,28 @@ export const getQueue = (queue_id, token) => {
     }
 }
 
+export const getQueue2 = (queue_id, token) => {
+    return (dispatch) => {
+        Axios.get(`https://${BaseURL}/services/queue/${queue_id}/`, {
+            headers: {
+                "Authorization": "Bearer " + token,
+            }
+        })
+            .then(data => {
+                dispatch({
+                    type: Action.SET_QUEUE,
+                    payload: data.data
+                })
+                NavigationService.navigate("queueScreenHistory")
+            })
+            .catch(() => {
+                dispatch({
+                    type: Action.QUEUE_ERRORS
+                })
+            })
+    }
+}
+
 export const getQueueHistory = (token) => {
     return (dispatch) => {
         Axios.get(`https://${BaseURL}/services/queue/history/`, {

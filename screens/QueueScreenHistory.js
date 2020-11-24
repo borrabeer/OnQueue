@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import QueueGridTile from "../components/QueueGridTile";
 import { useSelector, useDispatch } from "react-redux";
-import { getQueue, setLoading, updateQueueStatus } from "../store/actions/servicesAction";
+import { getQueue2, setLoading, updateQueueStatus } from "../store/actions/servicesAction";
 import NavigationService from "../NavigationService";
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
@@ -40,7 +40,7 @@ const QueueScreen = (props) => {
   const queue_id = props.navigation.getParam("queue_id");
   const dispatch = useDispatch();
   const getQueueHandler = (queue_id, token) => {
-    dispatch(getQueue(queue_id, token));
+    dispatch(getQueue2(queue_id, token));
   }
   const setLoadingHandler = (bool) => {
     dispatch(setLoading(bool));
@@ -65,9 +65,9 @@ const QueueScreen = (props) => {
       console.log(response);
     });
 
-    if (currentQueue.status === "รอเรียกคิว") {
-      setNotiSchedule();
-    }
+    // if (currentQueue.status === "รอเรียกคิว") {
+    //   setNotiSchedule();
+    // }
 
     return () => {
       Notifications.removeNotificationSubscription(notificationListener);
@@ -99,14 +99,6 @@ const QueueScreen = (props) => {
       {
         title: "สถานะ",
         detail: currentQueue.status
-      },
-      {
-        title: "จำนวนคิวที่รอ",
-        detail: currentQueue.waiting_queue
-      },
-      {
-        title: "เวลาที่รอโดยประมาณ",
-        detail: (currentQueue.waiting_queue * currentQueue.service.estimated) + " นาที"
       },
     ]
   }

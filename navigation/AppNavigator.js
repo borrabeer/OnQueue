@@ -25,6 +25,7 @@ import ManagerListScreen from "../screens/ManagerListScreen";
 import ManageQueueScreen from "../screens/ManageQueueScreen";
 import ManageLocationQueue from "../screens/ManageLocationQueue";
 import AllQueueScreen from "../screens/AllQueueScreen";
+import QueueScreenHistory from "../screens/QueueScreenHistory";
 
 const ServicesNavigator = createStackNavigator(
   {
@@ -32,6 +33,7 @@ const ServicesNavigator = createStackNavigator(
     shopScreen: ShopScreen,
     serviceScreen: ServiceScreen,
     queueScreen: QueueScreen,
+    queueScreenHistory: QueueScreenHistory,
   },
   {
     defaultNavigationOptions: {
