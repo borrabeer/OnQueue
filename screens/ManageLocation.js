@@ -64,14 +64,14 @@ const ManageLocation = (props) => {
 
 
     <View style={styles.screen}>
-      <SearchBar style={{ height: 30, }}
+      {/* <SearchBar style={{ height: 30, }}
         round
         lightTheme
         placeholder="Type Here..."
         containerStyle={{ width: "95%", backgroundColor: "#FFFFFF", borderRadius: 5 }}
       // onChangeText={this.updateSearch}
       // value={search}
-      />
+      /> */}
       <ScrollView>
         <View style={styles.screen}>
           <FlatList data={availableShops} renderItem={renderLocationItem} numColumns={1} />
