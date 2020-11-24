@@ -8,11 +8,12 @@ import {
   Image,
   FlatList,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { Card, ListItem, Button, Icon, SearchBar } from 'react-native-elements'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useDispatch, useSelector } from "react-redux";
-import { getAllServicesQueue, setLoading } from "../store/actions/servicesAction";
+import { getAllServicesQueue, setLoading, updateQueueStatus } from "../store/actions/servicesAction";
 
 const AllQueueScreen = (props) => {
   const isLoading = useSelector(state => state.services.isLoading);
@@ -25,6 +26,9 @@ const AllQueueScreen = (props) => {
   }
   const getAllServicesQueueHandler = (token, id) => {
     dispatch(getAllServicesQueue(token, id))
+  }
+  const updateQueueStatusHandler = (token, id, status) => {
+    dispatch(updateQueueStatus(token, id, status))
   }
   useEffect(() => {
     setLoadingHandler(true);
@@ -44,12 +48,34 @@ const AllQueueScreen = (props) => {
           <View style={styles.row}>
 
             <Text style={styles.text}>
-              คิวที่ 1
-        </Text>
-            <TouchableOpacity style={styles.bt1}>
+              คิวที่ {itemData.item.id}
+            </Text>
+            <TouchableOpacity style={styles.bt1} onPress={() => {
+              setLoadingHandler(true);
+              updateQueueStatusHandler(userToken, manageQueues[0].id, "O");
+            }}>
               <Text style={styles.text2}>เรียกคิว</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.bt2}>
+            <TouchableOpacity style={styles.bt2} onPress={() => {
+              Alert.alert(
+                "Warning!",
+                "ยืนยันที่จะยกเลิกคิวปัจจุบันหรือไม่",
+                [
+                  {
+                    text: "ยกเลิก",
+                    style: "cancel"
+                  },
+                  {
+                    text: "ยืนยัน", onPress: () => {
+                      setLoadingHandler(true);
+                      updateQueueStatusHandler(userToken, manageQueues[0].id, "C");
+                    },
+                    style: "destructive"
+                  }
+                ],
+                { cancelable: false }
+              );
+            }}>
               <Text style={styles.text3}>ลบคิว</Text>
             </TouchableOpacity>
           </View>
