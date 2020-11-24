@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     bt2: {
         //   flex: 3,
         top: 20,
-        left: 290,
+        left: 320,
         width: 60,
         height: 40,
         backgroundColor: "#206CD5",

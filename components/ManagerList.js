@@ -101,18 +101,18 @@ const styles = StyleSheet.create({
   },
   text4: {
     fontFamily: "Prompt_400Regular",
-    fontSize: 14,
-    top: 20,
+    fontSize: 10,
+    top: 30,
     left: 50,
     position: "absolute"
   },
   text3: {
     color: "white",
-    top: 10,
+    top: 7,
     fontFamily: "Prompt_400Regular",
-    fontSize: 16,
+    fontSize: 18,
     position: "relative",
-    left: 30,
+    left: 27,
   }
 });
 
